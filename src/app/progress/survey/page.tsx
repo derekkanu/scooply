@@ -7,7 +7,7 @@ import SurveyForm from '@/components/progress/SurveyForm'
 
 function MobileTopBar() {
   return (
-    <div className="lg:hidden sticky top-0 z-40 bg-[#F7F7F5]/90 backdrop-blur border-b border-zinc-100 px-6 h-14 flex items-center justify-between">
+    <div className="lg:hidden sticky top-0 z-40 bg-[#D9D9D9]/90 backdrop-blur border-b border-zinc-100 px-6 h-14 flex items-center justify-between">
       <span className="font-bold text-zinc-900">Survey</span>
       <form action={userLogout}>
         <button type="submit" className="text-sm font-medium text-zinc-600 hover:text-zinc-900">
@@ -23,7 +23,7 @@ export default async function SurveyPage() {
   if (!user) redirect('/login')
 
   return (
-    <div className="min-h-screen bg-[#F7F7F5] flex">
+    <div className="min-h-screen bg-[#D9D9D9] flex">
       <CategorySidebar activeKey="progress" userName={user.name} />
 
       <div className="flex-1 min-w-0 flex flex-col">

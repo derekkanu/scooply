@@ -2,33 +2,25 @@ import { Suspense } from 'react'
 import Link from 'next/link'
 import { getUserSession } from '@/lib/auth'
 import { filterPosts, getPosts } from '@/lib/data'
-import { categories, getCategoryById } from '@/lib/categories'
+import { getCategoryById } from '@/lib/categories'
 import { userLogout } from '@/lib/actions'
-import type { Post } from '@/lib/types'
-import PostCard from '@/components/PostCard'
-import PlatformIcon from '@/components/PlatformIcon'
-import TrackedPostLink from '@/components/TrackedPostLink'
 import CategorySidebar from '@/components/CategorySidebar'
 import SearchBar from '@/components/SearchBar'
 import WelcomeName from '@/components/dashboard/WelcomeName'
+import DashboardSocialCard from '@/components/dashboard/DashboardSocialCard'
+import FeaturedScoopCard from '@/components/dashboard/FeaturedScoopCard'
+import SavedSoopCard from '@/components/dashboard/SavedSoopCard'
 
 interface PageProps {
-  searchParams: Promise<{ category?: string; q?: string }>
+  searchParams: Promise<{ category?: string; q?: string; fp?: string }>
 }
+
+const FEATURED_PAGE_SIZE = 2
 
 function MobileTopBar() {
   return (
-    <div className="lg:hidden sticky top-0 z-40 bg-[#F7F7F5]/90 backdrop-blur border-b border-zinc-100 px-6 h-14 flex items-center justify-between">
-      <div className="flex items-center gap-2.5">
-        <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
-          <circle cx="14" cy="14" r="13" stroke="black" strokeWidth="1.5" />
-          <circle cx="14" cy="14" r="9" stroke="black" strokeWidth="1.5" />
-          <circle cx="14" cy="14" r="5" stroke="black" strokeWidth="1.5" />
-          <circle cx="14" cy="14" r="2" fill="black" />
-          <path d="M14 1 C 14 1, 27 14, 14 27" stroke="black" strokeWidth="1.2" fill="none" />
-        </svg>
-        <span className="font-bold text-zinc-900">Scooply</span>
-      </div>
+    <div className="lg:hidden sticky top-0 z-40 bg-[#D9D9D9]/90 backdrop-blur border-b border-zinc-300/70 px-6 h-14 flex items-center justify-between">
+      <span className="font-semibold text-zinc-900">Scooply.</span>
       <form action={userLogout}>
         <button type="submit" className="text-sm font-medium text-zinc-600 hover:text-zinc-900">
           Sign out
@@ -38,128 +30,97 @@ function MobileTopBar() {
   )
 }
 
-function PostListRow({ post }: { post: Post }) {
-  const category = getCategoryById(post.categoryId)
+function CarouselArrow({
+  href,
+  direction,
+  disabled,
+}: {
+  href: string
+  direction: 'prev' | 'next'
+  disabled: boolean
+}) {
+  const label = direction === 'prev' ? 'Previous featured' : 'Next featured'
+  const arrow =
+    direction === 'prev' ? (
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+    ) : (
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+    )
+  const className =
+    'w-9 h-9 rounded-full inline-flex items-center justify-center text-zinc-700 hover:text-zinc-900 transition-colors'
+  if (disabled) {
+    return (
+      <span aria-hidden className={`${className} opacity-30 pointer-events-none`}>
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {arrow}
+        </svg>
+      </span>
+    )
+  }
   return (
-    <TrackedPostLink
-      postId={post.id}
-      href={post.sourceUrl}
-      className="group flex items-center gap-4 px-5 py-4 hover:bg-zinc-50 transition-colors"
-    >
-      <PlatformIcon source={post.source} size="sm" />
-      <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold text-zinc-900 truncate">{post.title}</p>
-        <p className="text-xs text-zinc-500 truncate mt-0.5">
-          {category?.name}
-          {post.sourceHandle ? ` · ${post.sourceHandle}` : ''}
-        </p>
-      </div>
-      <svg
-        className="w-4 h-4 text-zinc-300 group-hover:text-zinc-500 transition-colors shrink-0"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+    <Link aria-label={label} href={href} className={className}>
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {arrow}
       </svg>
-    </TrackedPostLink>
-  )
-}
-
-function FeaturedPost({ post }: { post: Post }) {
-  const category = getCategoryById(post.categoryId)
-  return (
-    <article className="bg-white rounded-3xl shadow-sm overflow-hidden">
-      <div className="p-6">
-        <div className="flex items-center gap-2 mb-3">
-          <span
-            className="text-[11px] font-bold tracking-[0.12em] uppercase"
-            style={{ color: category?.color ?? '#3B82F6' }}
-          >
-            Featured · {category?.name ?? 'Story'}
-          </span>
-        </div>
-        <h2 className="text-2xl font-bold text-zinc-900 leading-tight">{post.title}</h2>
-        <p className="text-sm text-zinc-500 leading-relaxed mt-3 line-clamp-4">{post.content}</p>
-      </div>
-
-      {post.imageUrl && (
-        <div className="px-6">
-          <div className="relative rounded-2xl overflow-hidden">
-            <img src={post.imageUrl} alt={post.title} className="w-full h-64 object-cover" />
-            <div className="absolute top-3 left-3">
-              <PlatformIcon source={post.source} size="sm" />
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="px-6 pt-5 pb-6 mt-2 border-t border-zinc-100 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-zinc-400">
-          {post.sourceHandle && <span className="font-medium text-zinc-600">{post.sourceHandle}</span>}
-          <span>·</span>
-          <span>{new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
-        </div>
-        <TrackedPostLink
-          postId={post.id}
-          href={post.sourceUrl}
-          className="inline-flex items-center px-4 py-2 rounded-full bg-black text-white text-sm font-medium hover:bg-zinc-800 transition-colors"
-        >
-          Read full article
-        </TrackedPostLink>
-      </div>
-    </article>
+    </Link>
   )
 }
 
 export default async function DashboardPage({ searchParams }: PageProps) {
-  const { category, q } = await searchParams
+  const { category, q, fp } = await searchParams
   const user = await getUserSession()
 
-  // Just finished signup but haven't told us their name yet.
   if (user && !user.name) {
     return <WelcomeName />
   }
 
   const [posts, allPosts] = await Promise.all([filterPosts(category, q), getPosts()])
 
-  const postCounts: Record<string, number> = {}
-  for (const cat of categories) {
-    postCounts[cat.id] = allPosts.filter((p) => p.categoryId === cat.id).length
-  }
+  const savedIds = new Set(user?.savedPostIds ?? [])
+  const savedPosts = allPosts.filter((p) => savedIds.has(p.id))
 
   const firstName = user?.name?.split(' ')[0] ?? 'there'
   const isAllView = !category || category === 'all'
   const activeCategory = getCategoryById(category ?? '')
 
-  const topPicks = posts.slice(0, 3)
-  const featured = posts[3] ?? posts[0]
-  const featuredId = featured?.id
-  const rest = posts.slice(3).filter((p) => p.id !== featuredId)
+  const featuredPool = isAllView ? posts.slice(0, Math.min(posts.length, 8)) : []
+  const totalFeaturedPages = Math.max(1, Math.ceil(featuredPool.length / FEATURED_PAGE_SIZE))
+  const fpNum = Math.min(Math.max(parseInt(fp ?? '0', 10) || 0, 0), totalFeaturedPages - 1)
+  const featuredStart = fpNum * FEATURED_PAGE_SIZE
+  const featured = featuredPool.slice(featuredStart, featuredStart + FEATURED_PAGE_SIZE)
+  const featuredIds = new Set(featuredPool.map((p) => p.id))
+  const wallPosts = posts.filter((p) => !featuredIds.has(p.id))
 
-  const trending = [...categories]
-    .map((c) => ({ ...c, count: postCounts[c.id] ?? 0 }))
-    .sort((a, b) => b.count - a.count)
+  const buildPageHref = (page: number) => {
+    const p = new URLSearchParams()
+    if (category) p.set('category', category)
+    if (q) p.set('q', q)
+    if (page > 0) p.set('fp', String(page))
+    const qs = p.toString()
+    return qs ? `/dashboard?${qs}` : '/dashboard'
+  }
 
   return (
-    <div className="min-h-screen bg-[#F7F7F5] flex">
+    <div className="min-h-screen bg-[#D9D9D9] flex">
       <CategorySidebar activeKey={category ?? 'all'} userName={user?.name} />
 
       <div className="flex-1 min-w-0 flex flex-col">
         <MobileTopBar />
 
-        <main className="flex-1 px-6 lg:px-10 xl:px-14 py-8 lg:py-12">
-          <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-8 lg:gap-12">
+        <main className="flex-1 px-6 lg:px-12 xl:px-16 py-10 lg:py-14">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-10 lg:gap-14">
             {/* Center column */}
-            <div className="min-w-0 space-y-6">
+            <div className="min-w-0 space-y-8">
               <header>
                 {isAllView ? (
                   <>
-                    <h1 className="text-3xl font-bold text-zinc-900">Hello {firstName}</h1>
-                    <p className="text-zinc-500 mt-1.5 text-sm max-w-2xl">
+                    <h1 className="text-[44px] leading-[1.05] font-bold text-zinc-900 tracking-tight">
+                      Hello {firstName}
+                    </h1>
+                    <p className="text-zinc-500 mt-3 text-[15px] leading-relaxed max-w-2xl">
                       You&apos;re building solid AI literacy habits. This week you explored{' '}
-                      <span className="font-semibold text-red-500">{Math.min(posts.length, 12)}</span> stories out of{' '}
-                      <span className="font-semibold text-emerald-500">{allPosts.length}</span> we curated. Focus more
+                      <span className="font-semibold text-red-500">{Math.min(posts.length, 12)}</span> stories out of the{' '}
+                      <span className="font-semibold text-emerald-500">{allPosts.length}</span> we curated, focus more
                       on emerging tech to round out your knowledge.
                     </p>
                   </>
@@ -171,9 +132,11 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                     >
                       {activeCategory?.name ?? 'Filtered'}
                     </p>
-                    <h1 className="text-3xl font-bold text-zinc-900 mt-1">{activeCategory?.name ?? 'Stories'}</h1>
-                    <p className="text-zinc-500 mt-1.5 text-sm max-w-2xl">
-                      {activeCategory?.description ?? `Showing posts in this category.`}{' '}
+                    <h1 className="text-[44px] leading-[1.05] font-bold text-zinc-900 tracking-tight mt-1">
+                      {activeCategory?.name ?? 'Stories'}
+                    </h1>
+                    <p className="text-zinc-500 mt-3 text-[15px] leading-relaxed max-w-2xl">
+                      {activeCategory?.description ?? 'Showing posts in this category.'}{' '}
                       <span className="text-zinc-400">
                         ({posts.length} {posts.length === 1 ? 'story' : 'stories'})
                       </span>
@@ -183,91 +146,64 @@ export default async function DashboardPage({ searchParams }: PageProps) {
               </header>
 
               {posts.length === 0 ? (
-                <div className="bg-white rounded-3xl shadow-sm flex flex-col items-center justify-center py-24 text-zinc-400">
-                  <svg className="w-12 h-12 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
+                <div className="rounded-3xl border border-zinc-400/40 bg-white/15 backdrop-blur-[2px] flex flex-col items-center justify-center py-24 text-zinc-500">
                   <p className="text-base font-medium">No posts found</p>
-                  <p className="text-sm mt-1">Try a different search or category.</p>
+                  <p className="text-sm mt-1 text-zinc-400">Try a different search or category.</p>
                 </div>
-              ) : isAllView ? (
+              ) : (
                 <>
-                  {topPicks.length > 0 && (
+                  {featured.length > 0 && (
                     <section>
-                      <div className="flex items-baseline justify-between mb-3 px-1">
-                        <h2 className="text-xl font-bold text-zinc-900">Daily Digest</h2>
-                        <span className="text-xs text-zinc-400">
-                          {posts.length} {posts.length === 1 ? 'story' : 'stories'}
-                        </span>
-                      </div>
-                      <div className="bg-white rounded-3xl shadow-sm divide-y divide-zinc-100 overflow-hidden">
-                        {topPicks.map((post) => (
-                          <PostListRow key={post.id} post={post} />
-                        ))}
+                      <h2 className="text-[14px] font-medium text-zinc-700 mb-3">New scoop</h2>
+                      <div className="flex items-stretch gap-2">
+                        <div className="flex items-center">
+                          <CarouselArrow
+                            href={buildPageHref(fpNum - 1)}
+                            direction="prev"
+                            disabled={fpNum === 0}
+                          />
+                        </div>
+                        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                          {featured.map((post) => (
+                            <FeaturedScoopCard key={post.id} post={post} />
+                          ))}
+                        </div>
+                        <div className="flex items-center">
+                          <CarouselArrow
+                            href={buildPageHref(fpNum + 1)}
+                            direction="next"
+                            disabled={fpNum >= totalFeaturedPages - 1}
+                          />
+                        </div>
                       </div>
                     </section>
                   )}
 
-                  {featured && posts.length > 3 && <FeaturedPost post={featured} />}
-
-                  {rest.length > 0 && (
+                  {wallPosts.length > 0 && (
                     <section>
-                      <h2 className="text-xl font-bold text-zinc-900 mb-3 px-1">More stories</h2>
-                      <div className="columns-1 sm:columns-2 gap-4 space-y-4">
-                        {rest.map((post) => (
-                          <div key={post.id} className="break-inside-avoid">
-                            <PostCard post={post} />
-                          </div>
+                      <h2 className="text-[14px] font-medium text-zinc-700 mb-3">Your wall</h2>
+                      <div className="flex flex-col gap-5">
+                        {wallPosts.map((post) => (
+                          <DashboardSocialCard
+                            key={post.id}
+                            post={post}
+                            saved={savedIds.has(post.id)}
+                          />
                         ))}
                       </div>
                     </section>
                   )}
                 </>
-              ) : (
-                <div className="columns-1 sm:columns-2 gap-4 space-y-4">
-                  {posts.map((post) => (
-                    <div key={post.id} className="break-inside-avoid">
-                      <PostCard post={post} />
-                    </div>
-                  ))}
-                </div>
               )}
             </div>
 
             {/* Right column */}
-            <aside className="space-y-6 lg:sticky lg:top-6 lg:self-start">
+            <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
               <Suspense>
                 <SearchBar defaultValue={q} />
               </Suspense>
 
-              <div className="bg-white rounded-3xl shadow-sm p-5">
-                <h3 className="text-sm font-semibold text-zinc-900 mb-4">What&apos;s trending</h3>
-                <ol className="space-y-4">
-                  {trending.map((cat, idx) => (
-                    <li key={cat.id}>
-                      <Link href={`/dashboard?category=${cat.id}`} className="flex items-baseline gap-3 group">
-                        <span className="text-xs font-semibold text-zinc-300 tabular-nums w-5 shrink-0">
-                          {String(idx + 1).padStart(2, '0')}
-                        </span>
-                        <div className="min-w-0">
-                          <p className="text-sm font-semibold text-zinc-900 group-hover:text-black truncate">
-                            {cat.name}
-                          </p>
-                          <p className="text-xs text-zinc-400 mt-0.5">
-                            {cat.count} {cat.count === 1 ? 'story' : 'stories'}
-                          </p>
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-
+              <SavedSoopCard saved={savedPosts} />
             </aside>
           </div>
         </main>

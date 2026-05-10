@@ -13,7 +13,7 @@ interface StepFrameProps {
 
 export default function StepFrame({ step, eyebrow, title, subtitle, backHref, children }: StepFrameProps) {
   return (
-    <main className="min-h-screen flex flex-col bg-[#F7F7F5] px-4">
+    <main className="min-h-screen flex flex-col bg-[#D9D9D9] px-4">
       <div className="absolute top-6 left-6">
         <Link
           href={backHref ?? '/login'}

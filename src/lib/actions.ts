@@ -97,6 +97,18 @@ export async function markPostViewed(postId: string) {
   await updateUserSession({ viewedPostIds: Array.from(existing) })
 }
 
+export async function toggleSavedPost(postId: string) {
+  if (typeof postId !== 'string' || !postId) return
+  const current = await getUserSession()
+  if (!current) return
+  const existing = new Set(current.savedPostIds ?? [])
+  if (existing.has(postId)) existing.delete(postId)
+  else existing.add(postId)
+  await updateUserSession({ savedPostIds: Array.from(existing) })
+  revalidatePath('/dashboard')
+  revalidatePath('/saved')
+}
+
 export async function saveSurveyResults(formData: FormData) {
   const map: Record<string, Proficiency> = {}
   for (const cat of categories) {

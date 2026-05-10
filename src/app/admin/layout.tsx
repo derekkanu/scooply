@@ -4,7 +4,7 @@ import Button from '@/components/ui/Button'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#F7F7F5]">
+    <div className="min-h-screen bg-[#D9D9D9]">
       <header className="sticky top-0 z-40 bg-white border-b border-zinc-100">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-6">

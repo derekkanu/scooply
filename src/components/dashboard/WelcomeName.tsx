@@ -5,7 +5,7 @@ import ScooplyLogo from '@/components/ScooplyLogo'
 
 export default function WelcomeName() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[#F7F7F5] px-4">
+    <main className="min-h-screen flex items-center justify-center bg-[#D9D9D9] px-4">
       <div className="w-full max-w-md">
         <div className="flex flex-col items-center gap-3 mb-8">
           <ScooplyLogo size={44} showWordmark={false} />

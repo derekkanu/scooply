@@ -4,36 +4,35 @@ import ScooplyLogo from '@/components/ScooplyLogo'
 import HeroHeadline from '@/components/landing/HeroHeadline'
 import HeroBody from '@/components/landing/HeroBody'
 import HeroActions from '@/components/landing/HeroActions'
-import FloatingBubbles from '@/components/landing/FloatingBubbles'
-import DecorativeLines from '@/components/landing/DecorativeLines'
-import ScreenPreview from '@/components/landing/ScreenPreview'
+import PixelSphere from '@/components/landing/PixelSphere'
+import SocialCardRow from '@/components/landing/SocialCardRow'
 
 export default async function LandingPage() {
   const user = await getUserSession()
   if (user?.name) redirect('/dashboard')
 
   return (
-    <main className="relative min-h-screen bg-white overflow-hidden">
-      {/* Background lines span the full landing page — they pass behind the screen */}
-      <DecorativeLines />
+    <main className="relative min-h-screen bg-[#D9D9D9] overflow-hidden flex flex-col">
+      <header className="relative px-[120px] pt-8">
+        <ScooplyLogo size={28} />
+      </header>
 
-      <section className="relative">
-        <FloatingBubbles />
-
-        <div className="relative max-w-6xl mx-auto px-6 pt-12 pb-32 flex flex-col items-center gap-10">
-          <ScooplyLogo size={32} />
-
-          <div className="flex flex-col items-center gap-6 mt-8 max-w-3xl">
+      <section className="relative px-[120px] pt-12 sm:pt-16 pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-7 flex flex-col gap-8 max-w-2xl">
             <HeroHeadline />
             <HeroBody />
+            <HeroActions />
           </div>
 
-          <HeroActions />
+          <div className="lg:col-span-5 flex justify-end items-center">
+            <PixelSphere className="w-full max-w-[520px] h-auto" />
+          </div>
         </div>
       </section>
 
-      <section className="relative px-4 sm:px-6 z-10">
-        <ScreenPreview />
+      <section className="relative mt-auto">
+        <SocialCardRow />
       </section>
     </main>
   )

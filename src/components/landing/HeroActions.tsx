@@ -9,7 +9,7 @@ export default function HeroActions() {
 
   return (
     <>
-      <div className="flex items-center justify-center gap-3 flex-wrap">
+      <div className="flex items-center gap-3 flex-wrap">
         <button
           type="button"
           onClick={() => setOpen(true)}
@@ -19,7 +19,7 @@ export default function HeroActions() {
         </button>
         <Link
           href="/login"
-          className="group px-7 py-3.5 rounded-full bg-white text-zinc-900 text-sm font-medium border border-zinc-200 hover:border-zinc-300 transition-colors flex items-center gap-2"
+          className="group px-7 py-3.5 rounded-full bg-transparent text-zinc-900 text-sm font-medium border border-zinc-400/70 hover:border-zinc-500 transition-colors flex items-center gap-2"
         >
           Take a survey
           <svg

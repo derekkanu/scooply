@@ -14,7 +14,7 @@ export default async function AdminLoginPage({ searchParams }: AdminLoginPagePro
   const { error } = await searchParams
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[#F7F7F5] px-4">
+    <main className="min-h-screen flex items-center justify-center bg-[#D9D9D9] px-4">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center gap-2 mb-10">
           <svg width="44" height="44" viewBox="0 0 28 28" fill="none">
