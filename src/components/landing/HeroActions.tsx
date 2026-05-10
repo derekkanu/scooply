@@ -9,17 +9,17 @@ export default function HeroActions() {
 
   return (
     <>
-      <div className="flex items-center gap-3 flex-wrap">
+      <div className="flex items-center gap-2 sm:gap-3">
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="px-7 py-3.5 rounded-full bg-black text-white text-sm font-medium hover:bg-zinc-800 transition-colors"
+          className="px-4 sm:px-7 py-3.5 rounded-full bg-black text-white text-sm font-medium hover:bg-zinc-800 transition-colors whitespace-nowrap"
         >
           What is Scooply?
         </button>
         <Link
           href="/login"
-          className="group px-7 py-3.5 rounded-full bg-transparent text-zinc-900 text-sm font-medium border border-zinc-400/70 hover:border-zinc-500 transition-colors flex items-center gap-2"
+          className="group px-4 sm:px-7 py-3.5 rounded-full bg-transparent text-zinc-900 text-sm font-medium border border-zinc-400/70 hover:border-zinc-500 transition-colors flex items-center gap-2 whitespace-nowrap"
         >
           Take a survey
           <svg

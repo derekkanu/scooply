@@ -3,6 +3,7 @@ import { isAdminAuthenticated } from '@/lib/auth'
 import { adminLogin } from '@/lib/actions'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
+import ScooplyLogo from '@/components/ScooplyLogo'
 
 interface AdminLoginPageProps {
   searchParams: Promise<{ error?: string }>
@@ -16,14 +17,8 @@ export default async function AdminLoginPage({ searchParams }: AdminLoginPagePro
   return (
     <main className="min-h-screen flex items-center justify-center bg-[#D9D9D9] px-4">
       <div className="w-full max-w-sm">
-        <div className="flex flex-col items-center gap-2 mb-10">
-          <svg width="44" height="44" viewBox="0 0 28 28" fill="none">
-            <circle cx="14" cy="14" r="13" stroke="black" strokeWidth="1.5" />
-            <circle cx="14" cy="14" r="9" stroke="black" strokeWidth="1.5" />
-            <circle cx="14" cy="14" r="5" stroke="black" strokeWidth="1.5" />
-            <circle cx="14" cy="14" r="2" fill="black" />
-            <path d="M14 1 C 14 1, 27 14, 14 27" stroke="black" strokeWidth="1.2" fill="none" />
-          </svg>
+        <div className="flex flex-col items-center gap-3 mb-10">
+          <ScooplyLogo size={44} showWordmark={false} />
           <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Scooply CMS</h1>
           <p className="text-sm text-zinc-500">Admin access only</p>
         </div>

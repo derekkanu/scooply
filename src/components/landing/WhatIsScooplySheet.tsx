@@ -285,8 +285,8 @@ export default function WhatIsScooplySheet({ open, onClose }: WhatIsScooplySheet
         role="dialog"
         aria-modal="true"
         aria-label="What is Scooply"
-        className={`absolute inset-y-0 right-0 w-[75vw] bg-[#D9D9D9] rounded-l-3xl shadow-2xl transition-transform duration-300 ease-out ${
-          open ? 'translate-x-0' : 'translate-x-full'
+        className={`absolute left-0 right-0 bottom-0 top-12 rounded-t-3xl sm:top-0 sm:left-auto sm:w-[75vw] sm:rounded-t-none sm:rounded-l-3xl bg-[#D9D9D9] shadow-2xl transition-transform duration-300 ease-out ${
+          open ? 'translate-y-0 sm:translate-x-0' : 'translate-y-full sm:translate-y-0 sm:translate-x-full'
         }`}
       >
         <button
