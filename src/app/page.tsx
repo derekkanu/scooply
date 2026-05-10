@@ -6,6 +6,7 @@ import HeroBody from '@/components/landing/HeroBody'
 import HeroActions from '@/components/landing/HeroActions'
 import PixelSphere from '@/components/landing/PixelSphere'
 import SocialCardRow from '@/components/landing/SocialCardRow'
+import SplashOverlay from '@/components/landing/SplashOverlay'
 
 export default async function LandingPage() {
   const user = await getUserSession()
@@ -13,6 +14,7 @@ export default async function LandingPage() {
 
   return (
     <main className="relative min-h-screen bg-[#D9D9D9] overflow-hidden flex flex-col">
+      <SplashOverlay />
       <header className="relative px-10 lg:px-[120px] pt-8">
         <ScooplyLogo size={28} />
       </header>

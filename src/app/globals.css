@@ -35,3 +35,12 @@ body {
 .marquee-track {
   animation: marquee 40s linear infinite;
 }
+
+@keyframes splash-breathe {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 1; }
+}
+
+.splash-breathe {
+  animation: splash-breathe 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
