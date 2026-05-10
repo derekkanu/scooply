@@ -7,6 +7,7 @@ import HeroActions from '@/components/landing/HeroActions'
 import PixelSphere from '@/components/landing/PixelSphere'
 import SocialCardRow from '@/components/landing/SocialCardRow'
 import SplashOverlay from '@/components/landing/SplashOverlay'
+import LandingReveal from '@/components/landing/LandingReveal'
 
 export default async function LandingPage() {
   const user = await getUserSession()
@@ -16,25 +17,37 @@ export default async function LandingPage() {
     <main className="relative min-h-screen bg-[#D9D9D9] overflow-hidden flex flex-col">
       <SplashOverlay />
       <header className="relative px-10 lg:px-[120px] pt-8">
-        <ScooplyLogo size={28} />
+        <LandingReveal delay={0}>
+          <ScooplyLogo size={28} />
+        </LandingReveal>
       </header>
 
       <section className="relative px-10 lg:px-[120px] pt-12 sm:pt-16 pb-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-7 flex flex-col gap-8 max-w-2xl">
-            <HeroHeadline />
-            <HeroBody />
-            <HeroActions />
+            <LandingReveal delay={200}>
+              <HeroHeadline />
+            </LandingReveal>
+            <LandingReveal delay={450}>
+              <HeroBody />
+            </LandingReveal>
+            <LandingReveal delay={700}>
+              <HeroActions />
+            </LandingReveal>
           </div>
 
           <div className="lg:col-span-5 flex justify-end items-center">
-            <PixelSphere className="w-full max-w-[520px] h-auto" />
+            <LandingReveal delay={950} className="w-full flex justify-end">
+              <PixelSphere className="w-full max-w-[520px] h-auto" />
+            </LandingReveal>
           </div>
         </div>
       </section>
 
       <section className="relative mt-auto">
-        <SocialCardRow />
+        <LandingReveal delay={1200}>
+          <SocialCardRow />
+        </LandingReveal>
       </section>
     </main>
   )
