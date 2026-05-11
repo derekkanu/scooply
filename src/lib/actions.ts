@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createPost, updatePost, deletePost } from './data'
+import { addToWaitlist } from './waitlist'
 import {
   verifyAdminPassword,
   setAdminSession,
@@ -168,4 +169,15 @@ export async function deletePostAction(id: string) {
   await deletePost(id)
   revalidatePath('/dashboard')
   revalidatePath('/admin/posts')
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+export async function joinWaitlistAction(formData: FormData) {
+  const raw = (formData.get('email') as string | null)?.trim() ?? ''
+  if (!raw || !EMAIL_RE.test(raw)) {
+    redirect('/waitlist?error=email')
+  }
+  const { added } = await addToWaitlist(raw)
+  redirect(added ? '/waitlist?status=joined' : '/waitlist?status=already')
 }

@@ -18,10 +18,10 @@ export default function HeroActions() {
           What is Scooply?
         </button>
         <Link
-          href="/login"
+          href="/waitlist"
           className="group px-4 sm:px-7 py-3.5 rounded-full bg-transparent text-zinc-900 text-sm font-medium border border-zinc-400/70 hover:border-zinc-500 transition-colors flex items-center gap-2 whitespace-nowrap"
         >
-          Take a survey
+          Join the waiting list
           <svg
             width="16"
             height="16"

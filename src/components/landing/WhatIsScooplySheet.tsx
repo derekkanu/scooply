@@ -685,16 +685,6 @@ export default function WhatIsScooplySheet({ open, onClose }: WhatIsScooplySheet
                     />
                   </svg>
                 </Link>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const el = document.querySelector('[aria-label="What is Scooply"]')
-                    el?.scrollTo({ top: 0, behavior: 'smooth' })
-                  }}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-zinc-300 text-zinc-900 text-sm font-medium hover:border-zinc-500 transition-colors"
-                >
-                  What is Scooply?
-                </button>
               </div>
             </section>
           </div>
