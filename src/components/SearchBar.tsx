@@ -36,7 +36,7 @@ export default function SearchBar({ defaultValue }: { defaultValue?: string }) {
         defaultValue={defaultValue}
         onChange={(e) => handleChange(e.target.value)}
         placeholder="Search a post..."
-        className="w-full pl-10 pr-4 py-2.5 rounded-full border border-zinc-200 bg-white text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100 transition-colors"
+        className="w-full pl-10 pr-4 py-2.5 rounded-full border border-zinc-200 bg-white text-base sm:text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100 transition-colors"
       />
     </div>
   )
