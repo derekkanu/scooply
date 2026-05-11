@@ -23,7 +23,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${geist.variable} ${instrumentSerif.variable} h-full antialiased`}>
-      <body className="min-h-full overflow-x-hidden">{children}</body>
+      <body className="min-h-full overflow-x-clip">{children}</body>
     </html>
   )
 }
