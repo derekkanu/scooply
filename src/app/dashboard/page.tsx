@@ -160,30 +160,50 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                 </div>
               ) : (
                 <>
-                  {featured.length > 0 && (
+                  {featuredPool.length > 0 && (
                     <section>
                       <h2 className="text-[14px] font-medium text-zinc-700 mb-3">New scoop</h2>
-                      <div className="flex items-stretch gap-2">
-                        <div className="flex items-center">
-                          <CarouselArrow
-                            href={buildPageHref(fpNum - 1)}
-                            direction="prev"
-                            disabled={fpNum === 0}
-                          />
-                        </div>
-                        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
-                          {featured.map((post) => (
-                            <FeaturedScoopCard key={post.id} post={post} />
-                          ))}
-                        </div>
-                        <div className="flex items-center">
-                          <CarouselArrow
-                            href={buildPageHref(fpNum + 1)}
-                            direction="next"
-                            disabled={fpNum >= totalFeaturedPages - 1}
-                          />
+
+                      {/* Mobile: horizontal scroll showing the full pool */}
+                      <div className="lg:hidden -mx-6">
+                        <div className="overflow-x-auto no-scrollbar snap-x snap-mandatory">
+                          <div className="flex gap-4 px-6 pb-1 w-max">
+                            {featuredPool.map((post) => (
+                              <div
+                                key={post.id}
+                                className="snap-start shrink-0 w-[78vw] max-w-[360px] sm:w-[58vw]"
+                              >
+                                <FeaturedScoopCard post={post} />
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
+
+                      {/* Desktop: paginated 2-up with arrows */}
+                      {featured.length > 0 && (
+                        <div className="hidden lg:flex items-stretch gap-2">
+                          <div className="flex items-center">
+                            <CarouselArrow
+                              href={buildPageHref(fpNum - 1)}
+                              direction="prev"
+                              disabled={fpNum === 0}
+                            />
+                          </div>
+                          <div className="flex-1 grid grid-cols-2 gap-5">
+                            {featured.map((post) => (
+                              <FeaturedScoopCard key={post.id} post={post} />
+                            ))}
+                          </div>
+                          <div className="flex items-center">
+                            <CarouselArrow
+                              href={buildPageHref(fpNum + 1)}
+                              direction="next"
+                              disabled={fpNum >= totalFeaturedPages - 1}
+                            />
+                          </div>
+                        </div>
+                      )}
                     </section>
                   )}
 

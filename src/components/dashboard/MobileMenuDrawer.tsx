@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { categories } from '@/lib/categories'
 import { userLogout } from '@/lib/actions'
@@ -29,8 +30,14 @@ function Dot({ active }: { active: boolean }) {
 
 export default function MobileMenuDrawer({ activeKey, userName }: MobileMenuDrawerProps) {
   const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const active = activeKey || 'all'
   const signOutLabel = userName ? `Sign out · ${userName.split(' ')[0]}` : 'Sign out'
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- guards createPortal against SSR where document.body is undefined
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     if (!open) return
@@ -46,36 +53,26 @@ export default function MobileMenuDrawer({ activeKey, userName }: MobileMenuDraw
     }
   }, [open])
 
-  return (
-    <>
-      <button
-        type="button"
-        aria-label="Open menu"
-        aria-expanded={open}
-        onClick={() => setOpen(true)}
-        className="inline-flex items-center justify-center w-10 h-10 -mr-2 text-zinc-900 hover:text-zinc-700 transition-colors"
+  const drawer = (
+    <div
+      className={`fixed inset-0 z-[60] lg:hidden ${open ? '' : 'pointer-events-none'}`}
+      aria-hidden={!open}
+    >
+      <div
+        onClick={() => setOpen(false)}
+        className={`absolute inset-0 bg-black/55 transition-opacity duration-300 ${
+          open ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+      />
+
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Dashboard menu"
+        className={`absolute top-0 bottom-0 right-0 w-[82vw] max-w-[340px] bg-[#D9D9D9] shadow-2xl transition-transform duration-300 ease-out flex flex-col ${
+          open ? 'translate-x-0' : 'translate-x-full'
+        }`}
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" d="M4 7h16M4 12h16M4 17h16" />
-        </svg>
-      </button>
-
-      <div className={`fixed inset-0 z-50 lg:hidden ${open ? '' : 'pointer-events-none'}`} aria-hidden={!open}>
-        <div
-          onClick={() => setOpen(false)}
-          className={`absolute inset-0 bg-black/55 transition-opacity duration-300 ${
-            open ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          }`}
-        />
-
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Dashboard menu"
-          className={`absolute top-0 bottom-0 right-0 w-[82vw] max-w-[340px] bg-[#D9D9D9] shadow-2xl transition-transform duration-300 ease-out flex flex-col ${
-            open ? 'translate-x-0' : 'translate-x-full'
-          }`}
-        >
           <div className="flex items-center justify-between px-6 pt-6 pb-4">
             <ScooplyLogo size={26} />
             <button
@@ -141,6 +138,22 @@ export default function MobileMenuDrawer({ activeKey, userName }: MobileMenuDraw
           </nav>
         </div>
       </div>
+  )
+
+  return (
+    <>
+      <button
+        type="button"
+        aria-label="Open menu"
+        aria-expanded={open}
+        onClick={() => setOpen(true)}
+        className="inline-flex items-center justify-center w-10 h-10 -mr-2 text-zinc-900 hover:text-zinc-700 transition-colors"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path strokeLinecap="round" d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+      {mounted ? createPortal(drawer, document.body) : null}
     </>
   )
 }
