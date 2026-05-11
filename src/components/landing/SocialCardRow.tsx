@@ -10,46 +10,48 @@ interface SocialCard {
   body: string
 }
 
-const BODY =
-  'Over the past decade, AI has evolved from a niche tech to a catalyst for creativity across industries. As a product designer, I see AI not as a replacement but as a partner—one that augments our ability to dream, iterate, and create. When we leverage AI thoughtfully, we unlock new realms of design—where human intuition and machine precision meet.'
-
-const TITLE = 'AI’s Impact on Human Creativity'
-
 const CARDS: SocialCard[] = [
-  {
-    handle: '@oluwa.ilemon1',
-    platform: 'instagram',
-    avatar: <GradientAvatar from="#fde68a" to="#f97316" />,
-    title: TITLE,
-    body: BODY,
-  },
   {
     handle: '@anthropic',
     platform: 'twitter',
-    avatar: <InitialsAvatar initials="AI" bg="#FAF7F2" fg="#9A6B3A" />,
-    title: TITLE,
-    body: BODY,
+    avatar: <InitialsAvatar initials="AN" bg="#FAF7F2" fg="#9A6B3A" />,
+    title: 'Claude 4.7 ships with a 2M-token context',
+    body: 'Faster tool use, longer reasoning chains, fewer refusals on legit security work. Early benchmarks put it ahead of o4 on agentic coding. Model card has the full breakdown.',
   },
   {
-    handle: '@DataChaz',
+    handle: 'Dr. Maya Patel',
     platform: 'linkedin',
-    avatar: <GradientAvatar from="#fbbf24" to="#7c3aed" />,
-    title: TITLE,
-    body: BODY,
+    avatar: <GradientAvatar from="#fbcfe8" to="#c084fc" />,
+    title: 'The ethics of AI in education',
+    body: "As AI tutors become mainstream, we have to ask: who benefits? Students in well-funded schools get personalized AI mentors while others fall behind. This isn't a tech problem — it's a policy one.",
   },
   {
-    handle: '@man_vity',
+    handle: '@musicandmachines',
+    platform: 'twitter',
+    avatar: <GradientAvatar from="#fde68a" to="#f97316" />,
+    title: 'AI generated a song that made me cry',
+    body: 'I asked Suno to write a song about my grandmother. What came back was so emotionally resonant I genuinely teared up. Is that a gift or a warning?',
+  },
+  {
+    handle: 'futuretech_daily',
     platform: 'instagram',
-    avatar: <GradientAvatar from="#92400e" to="#1c1917" />,
-    title: TITLE,
-    body: BODY,
+    avatar: <GradientAvatar from="#bbf7d0" to="#34d399" />,
+    title: 'Robots learning to cook from YouTube',
+    body: 'New MIT research: robots watch a single cooking video and replicate the dish. The dexterity is wild. Commercial AI chefs might be five years away, not fifty.',
   },
   {
-    handle: '@deepseek',
-    platform: 'tiktok',
-    avatar: <DeepseekAvatar />,
-    title: TITLE,
-    body: BODY,
+    handle: '@swyx',
+    platform: 'twitter',
+    avatar: <InitialsAvatar initials="SW" bg="#E0E7FF" fg="#3730A3" />,
+    title: 'Prompt caching cut our API bill 90%',
+    body: 'We were spending $14k/month on Anthropic. Turned on prompt caching for our system prompt and tool defs — monthly bill dropped to $1.4k. Same throughput, same quality.',
+  },
+  {
+    handle: 'AI Engineering Hub',
+    platform: 'youtube',
+    avatar: <InitialsAvatar initials="AE" bg="#FEE2E2" fg="#991B1B" />,
+    title: 'Build your first AI agent in 30 minutes',
+    body: 'Walkthrough on building an autonomous AI agent end-to-end: memory, tools, and multi-step reasoning. Full code in the description so you can ship one tonight.',
   },
 ]
 
@@ -69,16 +71,6 @@ function InitialsAvatar({ initials, bg, fg }: { initials: string; bg: string; fg
       style={{ backgroundColor: bg, color: fg }}
     >
       {initials}
-    </div>
-  )
-}
-
-function DeepseekAvatar() {
-  return (
-    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="#4D6BFE" aria-hidden>
-        <path d="M21.5 8.5c-1 .3-2 .3-3 0-.5-1.5-2-2.5-3.5-2.5-2 0-3.5 1.5-3.5 3.5 0 .5.1 1 .3 1.5-3 .3-5.5 2-7 4.5-.5-.3-1-.5-1.5-.5C2.4 15 1.5 16 1.5 17s.9 2 2 2c.6 0 1.1-.2 1.5-.6 1.6 1.7 4 2.6 6.5 2.6 4.5 0 8.5-3.2 9-7.8.4-.2.8-.5 1.2-.8.7-.6 1.2-1.4 1.3-2.3.2-.7-.1-1.4-.5-1.6zm-7.5 6c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1z" />
-      </svg>
     </div>
   )
 }
