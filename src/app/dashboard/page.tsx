@@ -8,16 +8,14 @@ import SearchBar from '@/components/SearchBar'
 import ScooplyLogo from '@/components/ScooplyLogo'
 import WelcomeName from '@/components/dashboard/WelcomeName'
 import DashboardSocialCard from '@/components/dashboard/DashboardSocialCard'
-import FeaturedScoopCard from '@/components/dashboard/FeaturedScoopCard'
+import NewScoopCarousel from '@/components/dashboard/NewScoopCarousel'
 import SavedSoopCard from '@/components/dashboard/SavedSoopCard'
 import MobileMenuDrawer from '@/components/dashboard/MobileMenuDrawer'
 import MobileCategoryPills from '@/components/dashboard/MobileCategoryPills'
 
 interface PageProps {
-  searchParams: Promise<{ category?: string; q?: string; fp?: string }>
+  searchParams: Promise<{ category?: string; q?: string }>
 }
-
-const FEATURED_PAGE_SIZE = 2
 
 function MobileTopBar({ activeKey, userName }: { activeKey: string; userName?: string }) {
   return (
@@ -30,44 +28,8 @@ function MobileTopBar({ activeKey, userName }: { activeKey: string; userName?: s
   )
 }
 
-function CarouselArrow({
-  href,
-  direction,
-  disabled,
-}: {
-  href: string
-  direction: 'prev' | 'next'
-  disabled: boolean
-}) {
-  const label = direction === 'prev' ? 'Previous featured' : 'Next featured'
-  const arrow =
-    direction === 'prev' ? (
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-    ) : (
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-    )
-  const className =
-    'w-9 h-9 rounded-full inline-flex items-center justify-center text-zinc-700 hover:text-zinc-900 transition-colors'
-  if (disabled) {
-    return (
-      <span aria-hidden className={`${className} opacity-30 pointer-events-none`}>
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          {arrow}
-        </svg>
-      </span>
-    )
-  }
-  return (
-    <Link aria-label={label} href={href} className={className}>
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        {arrow}
-      </svg>
-    </Link>
-  )
-}
-
 export default async function DashboardPage({ searchParams }: PageProps) {
-  const { category, q, fp } = await searchParams
+  const { category, q } = await searchParams
   const user = await getUserSession()
 
   if (user && !user.name) {
@@ -84,21 +46,8 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   const activeCategory = getCategoryById(category ?? '')
 
   const featuredPool = isAllView ? posts.slice(0, Math.min(posts.length, 8)) : []
-  const totalFeaturedPages = Math.max(1, Math.ceil(featuredPool.length / FEATURED_PAGE_SIZE))
-  const fpNum = Math.min(Math.max(parseInt(fp ?? '0', 10) || 0, 0), totalFeaturedPages - 1)
-  const featuredStart = fpNum * FEATURED_PAGE_SIZE
-  const featured = featuredPool.slice(featuredStart, featuredStart + FEATURED_PAGE_SIZE)
   const featuredIds = new Set(featuredPool.map((p) => p.id))
   const wallPosts = posts.filter((p) => !featuredIds.has(p.id))
-
-  const buildPageHref = (page: number) => {
-    const p = new URLSearchParams()
-    if (category) p.set('category', category)
-    if (q) p.set('q', q)
-    if (page > 0) p.set('fp', String(page))
-    const qs = p.toString()
-    return qs ? `/dashboard?${qs}` : '/dashboard'
-  }
 
   return (
     <div className="min-h-screen bg-[#D9D9D9] flex">
@@ -163,47 +112,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                   {featuredPool.length > 0 && (
                     <section>
                       <h2 className="text-[14px] font-medium text-zinc-700 mb-3">New scoop</h2>
-
-                      {/* Mobile: horizontal scroll showing the full pool */}
-                      <div className="lg:hidden -mx-6">
-                        <div className="overflow-x-auto no-scrollbar snap-x snap-mandatory">
-                          <div className="flex gap-4 px-6 pb-1 w-max">
-                            {featuredPool.map((post) => (
-                              <div
-                                key={post.id}
-                                className="snap-start shrink-0 w-[78vw] max-w-[360px] sm:w-[58vw]"
-                              >
-                                <FeaturedScoopCard post={post} />
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Desktop: paginated 2-up with arrows */}
-                      {featured.length > 0 && (
-                        <div className="hidden lg:flex items-stretch gap-2">
-                          <div className="flex items-center">
-                            <CarouselArrow
-                              href={buildPageHref(fpNum - 1)}
-                              direction="prev"
-                              disabled={fpNum === 0}
-                            />
-                          </div>
-                          <div className="flex-1 grid grid-cols-2 gap-5">
-                            {featured.map((post) => (
-                              <FeaturedScoopCard key={post.id} post={post} />
-                            ))}
-                          </div>
-                          <div className="flex items-center">
-                            <CarouselArrow
-                              href={buildPageHref(fpNum + 1)}
-                              direction="next"
-                              disabled={fpNum >= totalFeaturedPages - 1}
-                            />
-                          </div>
-                        </div>
-                      )}
+                      <NewScoopCarousel posts={featuredPool} />
                     </section>
                   )}
 
