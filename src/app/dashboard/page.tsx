@@ -3,13 +3,15 @@ import Link from 'next/link'
 import { getUserSession } from '@/lib/auth'
 import { filterPosts, getPosts } from '@/lib/data'
 import { getCategoryById } from '@/lib/categories'
-import { userLogout } from '@/lib/actions'
 import CategorySidebar from '@/components/CategorySidebar'
 import SearchBar from '@/components/SearchBar'
+import ScooplyLogo from '@/components/ScooplyLogo'
 import WelcomeName from '@/components/dashboard/WelcomeName'
 import DashboardSocialCard from '@/components/dashboard/DashboardSocialCard'
 import FeaturedScoopCard from '@/components/dashboard/FeaturedScoopCard'
 import SavedSoopCard from '@/components/dashboard/SavedSoopCard'
+import MobileMenuDrawer from '@/components/dashboard/MobileMenuDrawer'
+import MobileCategoryPills from '@/components/dashboard/MobileCategoryPills'
 
 interface PageProps {
   searchParams: Promise<{ category?: string; q?: string; fp?: string }>
@@ -17,15 +19,13 @@ interface PageProps {
 
 const FEATURED_PAGE_SIZE = 2
 
-function MobileTopBar() {
+function MobileTopBar({ activeKey, userName }: { activeKey: string; userName?: string }) {
   return (
-    <div className="lg:hidden sticky top-0 z-40 bg-[#D9D9D9]/90 backdrop-blur border-b border-zinc-300/70 px-6 h-14 flex items-center justify-between">
-      <span className="font-semibold text-zinc-900">Scooply.</span>
-      <form action={userLogout}>
-        <button type="submit" className="text-sm font-medium text-zinc-600 hover:text-zinc-900">
-          Sign out
-        </button>
-      </form>
+    <div className="lg:hidden sticky top-0 z-40 bg-[#D9D9D9]/90 backdrop-blur px-6 h-16 flex items-center justify-between">
+      <Link href="/dashboard" className="inline-flex items-center" aria-label="Scooply home">
+        <ScooplyLogo size={26} showWordmark={false} />
+      </Link>
+      <MobileMenuDrawer activeKey={activeKey} userName={userName} />
     </div>
   )
 }
@@ -105,16 +105,16 @@ export default async function DashboardPage({ searchParams }: PageProps) {
       <CategorySidebar activeKey={category ?? 'all'} userName={user?.name} />
 
       <div className="flex-1 min-w-0 flex flex-col">
-        <MobileTopBar />
+        <MobileTopBar activeKey={category ?? 'all'} userName={user?.name} />
 
-        <main className="flex-1 px-6 lg:px-12 xl:px-16 py-10 lg:py-14">
+        <main className="flex-1 px-6 lg:px-12 xl:px-16 pt-4 pb-10 lg:py-14">
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-10 lg:gap-14">
             {/* Center column */}
-            <div className="min-w-0 space-y-8">
+            <div className="min-w-0 space-y-6 lg:space-y-8">
               <header>
                 {isAllView ? (
                   <>
-                    <h1 className="text-[44px] leading-[1.05] font-bold text-zinc-900 tracking-tight">
+                    <h1 className="text-[32px] sm:text-[40px] lg:text-[44px] leading-[1.05] font-bold text-zinc-900 tracking-tight">
                       Hello {firstName}
                     </h1>
                     <p className="text-zinc-500 mt-3 text-[15px] leading-relaxed max-w-2xl">
@@ -132,7 +132,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                     >
                       {activeCategory?.name ?? 'Filtered'}
                     </p>
-                    <h1 className="text-[44px] leading-[1.05] font-bold text-zinc-900 tracking-tight mt-1">
+                    <h1 className="text-[32px] sm:text-[40px] lg:text-[44px] leading-[1.05] font-bold text-zinc-900 tracking-tight mt-1">
                       {activeCategory?.name ?? 'Stories'}
                     </h1>
                     <p className="text-zinc-500 mt-3 text-[15px] leading-relaxed max-w-2xl">
@@ -144,6 +144,14 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                   </>
                 )}
               </header>
+
+              {/* Mobile-only nav + search row */}
+              <div className="lg:hidden space-y-4">
+                <MobileCategoryPills active={category ?? 'all'} />
+                <Suspense>
+                  <SearchBar defaultValue={q} />
+                </Suspense>
+              </div>
 
               {posts.length === 0 ? (
                 <div className="rounded-3xl border border-zinc-400/40 bg-white/15 backdrop-blur-[2px] flex flex-col items-center justify-center py-24 text-zinc-500">
@@ -197,8 +205,8 @@ export default async function DashboardPage({ searchParams }: PageProps) {
               )}
             </div>
 
-            {/* Right column */}
-            <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
+            {/* Right column — desktop only; mobile uses inline search + drawer for saved */}
+            <aside className="hidden lg:block space-y-5 lg:sticky lg:top-6 lg:self-start">
               <Suspense>
                 <SearchBar defaultValue={q} />
               </Suspense>

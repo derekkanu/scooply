@@ -44,3 +44,11 @@ body {
 .splash-breathe {
   animation: splash-breathe 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
