@@ -196,33 +196,258 @@ function UpwardPath() {
   )
 }
 
-interface ScreenshotPlaceholderProps {
-  label: string
-  caption: string
-  aspect?: string
+function MockFrame({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="rounded-2xl bg-[#D9D9D9] border border-zinc-300 shadow-sm overflow-hidden">
+      {children}
+    </div>
+  )
 }
 
-function ScreenshotPlaceholder({ label, caption, aspect = 'aspect-[16/9]' }: ScreenshotPlaceholderProps) {
+function MockDot({ active }: { active: boolean }) {
   return (
-    <div
-      className={`relative ${aspect} w-full rounded-2xl border-2 border-dashed border-zinc-300 bg-zinc-50 flex flex-col items-center justify-center gap-2 text-center px-6`}
-    >
-      <svg
-        width="40"
-        height="40"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        className="text-zinc-400"
-        strokeWidth="1.5"
-      >
-        <rect x="3" y="5" width="18" height="14" rx="2" />
-        <path strokeLinecap="round" d="M3 16l4-4 4 4 3-3 7 7" />
-        <circle cx="9" cy="10" r="1.5" fill="currentColor" stroke="none" />
-      </svg>
-      <p className="text-[11px] font-bold tracking-[0.14em] uppercase text-zinc-500">{label}</p>
-      <p className="text-sm text-zinc-500 max-w-md">{caption}</p>
-    </div>
+    <span
+      aria-hidden
+      className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+        active ? 'bg-zinc-900' : 'border border-zinc-400 bg-transparent'
+      }`}
+    />
+  )
+}
+
+const MOCK_SIDEBAR = [
+  { label: 'All', active: true },
+  { label: 'AI Foundations', active: false },
+  { label: 'Hands-On AI Tools', active: false },
+  { label: 'AI with Heart', active: false },
+  { label: 'Stay Curious', active: false },
+] as const
+
+const MOCK_SECONDARY = ['Progress', 'Settings', 'Sign out'] as const
+
+const MOCK_NEW_SCOOPS = [
+  { title: "AI's Impact on Human Creativity", body: 'Over the past decade, AI has evolved from a niche tech to a catalyst for creativity across industries.' },
+  { title: 'Stay Up to Date: The Rise of AI in Daily Life', body: "Whether you're a pro staying ahead or just starting out, Scoop helps you track what matters most." },
+] as const
+
+const MOCK_WALL = [
+  { initials: 'DR', name: 'Dr. Maya Patel', title: 'The Ethics of AI in Education', body: 'As AI tutors become mainstream, we must ask: who benefits?' },
+  { initials: 'MU', handle: '@musicandmachines', title: 'AI Generates Music That Made Me Cry', body: 'I asked Suno to write a song about my grandmother. What came back was so emotionally resonant…' },
+] as const
+
+function DashboardMock() {
+  return (
+    <MockFrame>
+      <div className="flex h-[420px] sm:h-[480px] text-zinc-900">
+        {/* Sidebar */}
+        <div className="hidden sm:flex flex-col w-[150px] shrink-0 border-r border-zinc-300/70 p-4 gap-2.5">
+          <ScooplyLogo size={14} showWordmark />
+          <div className="mt-3 flex flex-col gap-2.5">
+            {MOCK_SIDEBAR.map((it) => (
+              <div key={it.label} className="flex items-center gap-2">
+                <MockDot active={it.active} />
+                <span className={`text-[10px] truncate ${it.active ? 'font-semibold text-zinc-900' : 'text-zinc-600'}`}>
+                  {it.label}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="my-2 border-t border-zinc-300/70" />
+          <div className="flex flex-col gap-2.5">
+            {MOCK_SECONDARY.map((label) => (
+              <div key={label} className="flex items-center gap-2">
+                <MockDot active={false} />
+                <span className="text-[10px] text-zinc-600 truncate">{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Main */}
+        <div className="flex-1 min-w-0 p-4 sm:p-5 overflow-hidden">
+          <p className="text-[18px] sm:text-[22px] font-bold tracking-tight">Hello d</p>
+          <p className="text-[9px] sm:text-[10px] text-zinc-600 mt-1 leading-snug">
+            You&apos;re building solid AI literacy habits. This week you explored{' '}
+            <span className="text-red-500 font-semibold">12</span> stories out of the{' '}
+            <span className="text-red-500 font-semibold">12</span> we curated.
+          </p>
+
+          <p className="text-[9px] font-medium text-zinc-600 mt-3">New scoop</p>
+          <div className="grid grid-cols-2 gap-2 mt-1.5">
+            {MOCK_NEW_SCOOPS.map((s) => (
+              <div key={s.title} className="rounded-lg border border-zinc-300/70 bg-white/30 p-2">
+                <p className="text-[9px] font-semibold leading-snug line-clamp-2">{s.title}</p>
+                <p className="text-[8px] text-zinc-600 mt-1 leading-snug line-clamp-2">{s.body}</p>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-[9px] font-medium text-zinc-600 mt-3">Your wall</p>
+          <div className="flex flex-col gap-1.5 mt-1.5">
+            {MOCK_WALL.map((p) => (
+              <div key={p.title} className="rounded-lg bg-white p-2 flex items-start gap-2 shadow-sm">
+                <div className="w-4 h-4 rounded-full bg-zinc-200 shrink-0 flex items-center justify-center text-[6px] font-bold text-zinc-500">
+                  {p.initials}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[8px] text-zinc-500 truncate">{'handle' in p ? p.handle : p.name}</p>
+                  <p className="text-[9px] font-semibold leading-snug line-clamp-1">{p.title}</p>
+                  <p className="text-[8px] text-zinc-500 leading-snug line-clamp-1 mt-0.5">{p.body}</p>
+                </div>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-zinc-400 shrink-0">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+                </svg>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right rail */}
+        <div className="hidden md:flex flex-col w-[140px] shrink-0 p-4 gap-3">
+          <div className="rounded-md border border-zinc-300/70 bg-white/40 px-2 py-1.5 flex items-center gap-1.5">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-zinc-500">
+              <circle cx="11" cy="11" r="7" />
+              <path strokeLinecap="round" d="M21 21l-4-4" />
+            </svg>
+            <span className="text-[8px] text-zinc-500">Search a post…</span>
+          </div>
+          <div className="rounded-lg bg-white/60 border border-zinc-300/40 p-3 flex flex-col items-center text-center gap-1.5">
+            <p className="text-[9px] font-semibold self-start text-zinc-700">Saved soop</p>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-zinc-400 mt-3">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+            </svg>
+            <p className="text-[9px] font-medium text-zinc-700">No saved scoops yet</p>
+            <p className="text-[7px] text-zinc-500 leading-snug">Tap the bookmark on any scoop to save it for later.</p>
+          </div>
+        </div>
+      </div>
+    </MockFrame>
+  )
+}
+
+function ProgressCardMock() {
+  return (
+    <MockFrame>
+      <div className="p-6 sm:p-10">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-[20px] sm:text-[26px] font-bold tracking-tight text-zinc-900 leading-tight">Your Progress</p>
+            <p className="text-[10px] sm:text-[11px] text-zinc-600 mt-1 max-w-md leading-snug">
+              How you&apos;ve interacted with stories — per category and cumulatively. Take the proficiency survey any time to recalibrate.
+            </p>
+          </div>
+          <div className="hidden sm:inline-flex items-center gap-1.5 bg-zinc-900 text-white text-[10px] font-medium px-3 py-2 rounded-full">
+            Take proficiency survey
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+
+        <div className="mt-6 rounded-2xl bg-white shadow-sm p-5">
+          <div className="flex items-baseline justify-between">
+            <p className="text-[11px] sm:text-[12px] font-semibold text-zinc-900">Cumulative engagement</p>
+            <span className="text-[9px] sm:text-[10px] text-zinc-400">across all categories</span>
+          </div>
+          <div className="flex items-baseline gap-2 mt-3">
+            <span className="text-3xl sm:text-4xl font-bold tabular-nums">0</span>
+            <span className="text-[10px] sm:text-[11px] text-zinc-500">of 12 stories explored</span>
+          </div>
+          <div className="relative h-1.5 rounded-full bg-zinc-100 overflow-hidden mt-4">
+            <div className="absolute inset-y-0 left-0 w-0 rounded-full bg-zinc-900" />
+          </div>
+          <p className="text-[9px] sm:text-[10px] text-zinc-400 mt-2 tabular-nums">0% of catalog</p>
+          <p className="text-[9px] sm:text-[10px] text-zinc-500 mt-3">
+            You haven&apos;t opened any stories yet. Click into a post on the dashboard and it&apos;ll show up here.
+          </p>
+        </div>
+      </div>
+    </MockFrame>
+  )
+}
+
+const MOCK_CATEGORIES = [
+  { name: 'AI Foundations', color: '#3B82F6', desc: 'Core concepts, model releases, and research breakthroughs shaping the AI landscape.', ratio: '0/4' },
+  { name: 'Hands-On AI Tools', color: '#F59E0B', desc: 'Practical tools, tutorials, and workflows to level up your AI skills.', ratio: '0/3' },
+  { name: 'AI with Heart', color: '#8B5CF6', desc: 'Human stories, ethics, and the social impact of AI on communities.', ratio: '0/3' },
+  { name: 'Stay Curious', color: '#10B981', desc: 'Weird, wonderful, and unexpected frontiers of AI exploration.', ratio: '0/2' },
+] as const
+
+function ProgressDashboardMock() {
+  return (
+    <MockFrame>
+      <div className="p-6 sm:p-8">
+        <p className="text-[12px] sm:text-[14px] font-bold tracking-tight text-zinc-900">By category</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+          {MOCK_CATEGORIES.map((c) => (
+            <div key={c.name} className="rounded-2xl bg-white shadow-sm p-4">
+              <div className="flex items-start justify-between gap-3">
+                <p className="text-[9px] sm:text-[10px] font-bold tracking-[0.14em] uppercase" style={{ color: c.color }}>
+                  {c.name}
+                </p>
+                <span
+                  className="text-[8px] sm:text-[9px] font-semibold px-1.5 py-0.5 rounded-full tabular-nums"
+                  style={{ backgroundColor: `${c.color}18`, color: c.color }}
+                >
+                  {c.ratio}
+                </span>
+              </div>
+              <p className="text-[8px] sm:text-[9px] text-zinc-500 mt-2 leading-snug line-clamp-2">{c.desc}</p>
+
+              <div className="flex items-baseline justify-between mt-3">
+                <p className="text-[8px] sm:text-[9px] text-zinc-500">Engagement</p>
+                <p className="text-[8px] sm:text-[9px] font-semibold tabular-nums text-zinc-900">0%</p>
+              </div>
+              <div className="relative h-1 rounded-full bg-zinc-100 overflow-hidden mt-1">
+                <div className="absolute inset-y-0 left-0 w-0 rounded-full" style={{ backgroundColor: c.color }} />
+              </div>
+
+              <div className="flex items-baseline justify-between mt-2.5">
+                <p className="text-[8px] sm:text-[9px] text-zinc-500">Your level</p>
+                <p className="text-[8px] sm:text-[9px] font-semibold text-zinc-900">Not assessed</p>
+              </div>
+              <div className="relative h-1 rounded-full bg-zinc-100 overflow-hidden mt-1">
+                <div className="absolute inset-y-0 left-0 w-0 rounded-full" style={{ backgroundColor: c.color, opacity: 0.55 }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </MockFrame>
+  )
+}
+
+const MOCK_SAVED = [
+  { initials: 'DR', name: 'Dr. Maya Patel', title: 'The Ethics of AI in Education', body: 'As AI tutors become mainstream, we must ask: who benefits? Students in well-funded schools get personalized AI mentors while others fall behind.' },
+  { initials: 'MU', name: '@musicandmachines', title: 'AI Generates Music That Made Me Cry', body: 'I asked Suno to write a song about my grandmother. What came back was so emotionally resonant I genuinely teared up.' },
+] as const
+
+function SavedScoopsMock() {
+  return (
+    <MockFrame>
+      <div className="p-6 sm:p-10">
+        <p className="text-[22px] sm:text-[28px] font-bold tracking-tight text-zinc-900 leading-tight">Saved scoops</p>
+        <p className="text-[10px] sm:text-[11px] text-zinc-500 mt-1">2 scoops saved.</p>
+
+        <div className="mt-5 flex flex-col gap-3">
+          {MOCK_SAVED.map((p) => (
+            <div key={p.title} className="rounded-2xl bg-white p-4 flex items-start gap-3 shadow-sm">
+              <div className="w-7 h-7 rounded-full bg-zinc-200 shrink-0 flex items-center justify-center text-[9px] font-bold text-zinc-500">
+                {p.initials}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] sm:text-[11px] text-zinc-500">{p.name}</p>
+                <p className="text-[11px] sm:text-[13px] font-semibold leading-snug text-zinc-900 mt-0.5">{p.title}</p>
+                <p className="text-[9px] sm:text-[10px] text-zinc-500 leading-snug mt-1 line-clamp-2">{p.body}</p>
+              </div>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-zinc-900 shrink-0">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+              </svg>
+            </div>
+          ))}
+        </div>
+      </div>
+    </MockFrame>
   )
 }
 
@@ -334,12 +559,7 @@ export default function WhatIsScooplySheet({ open, onClose }: WhatIsScooplySheet
                   </p>
                 </>
               }
-              visual={
-                <ScreenshotPlaceholder
-                  label="Dashboard view"
-                  caption="The four-category sidebar, New scoop carousel, Your wall, and saved-scoops rail."
-                />
-              }
+              visual={<DashboardMock />}
             />
 
             {/* Section 3 — Learning That Sticks */}
@@ -385,12 +605,7 @@ export default function WhatIsScooplySheet({ open, onClose }: WhatIsScooplySheet
                   </p>
                 </>
               }
-              visual={
-                <ScreenshotPlaceholder
-                  label="Your progress card"
-                  caption="Cumulative engagement, category completion, and the proficiency level display."
-                />
-              }
+              visual={<ProgressCardMock />}
             />
 
             {/* Section 5 — Performance at a Glance */}
@@ -408,12 +623,7 @@ export default function WhatIsScooplySheet({ open, onClose }: WhatIsScooplySheet
                   you understand yourself as a learner and guide where you want to go next.
                 </p>
               }
-              visual={
-                <ScreenshotPlaceholder
-                  label="Progress dashboard"
-                  caption="Four category cards with engagement percentages, completion ratios, and proficiency levels."
-                />
-              }
+              visual={<ProgressDashboardMock />}
             />
 
             {/* Section 6 — Save What Matters */}
@@ -427,12 +637,7 @@ export default function WhatIsScooplySheet({ open, onClose }: WhatIsScooplySheet
                   it. Your library grows with you.
                 </p>
               }
-              visual={
-                <ScreenshotPlaceholder
-                  label="Saved scoops page"
-                  caption="Saved articles with author avatars, titles, and brief descriptions in one quiet view."
-                />
-              }
+              visual={<SavedScoopsMock />}
             />
 
             {/* Section 7 — Why This Matters */}
