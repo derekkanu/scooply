@@ -12,6 +12,9 @@ const instrumentSerif = Instrument_Serif({
 export const metadata: Metadata = {
   title: 'Scooply – AI News for Enthusiasts',
   description: 'Stay up to date with the AI world, curated for you.',
+  openGraph: {
+    images: '/og-image.png',
+  },
 }
 
 export const viewport: Viewport = {
