@@ -15,6 +15,8 @@ export interface UserSession {
   categoryProficiency?: Record<string, Proficiency>
   viewedPostIds?: string[]
   savedPostIds?: string[]
+  likedPostIds?: string[]
+  dislikedPostIds?: string[]
 }
 
 export async function isAdminAuthenticated(): Promise<boolean> {

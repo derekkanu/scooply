@@ -2,13 +2,15 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Post } from '@/lib/types'
+import type { PostReaction } from '@/lib/actions'
 import FeaturedScoopCard from './FeaturedScoopCard'
 
 interface NewScoopCarouselProps {
   posts: Post[]
+  reactions?: Record<string, PostReaction>
 }
 
-export default function NewScoopCarousel({ posts }: NewScoopCarouselProps) {
+export default function NewScoopCarousel({ posts, reactions }: NewScoopCarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const [canPrev, setCanPrev] = useState(false)
   const [canNext, setCanNext] = useState(true)
@@ -46,16 +48,16 @@ export default function NewScoopCarousel({ posts }: NewScoopCarouselProps) {
     <div className="relative">
       <div
         ref={trackRef}
-        className="overflow-x-auto no-scrollbar snap-x snap-mandatory -mx-6 lg:mx-0"
+        className="overflow-x-auto no-scrollbar snap-x snap-mandatory"
       >
-        <div className="flex gap-5 px-6 lg:px-0 w-max lg:w-full">
+        <div className="flex gap-5 w-max lg:w-full">
           {posts.map((post) => (
             <div
               key={post.id}
               data-scoop-card
-              className="snap-start shrink-0 w-[78vw] max-w-[360px] sm:w-[58vw] lg:w-[calc((100%-1.25rem)/2)] lg:max-w-none"
+              className="snap-start shrink-0 w-[72vw] max-w-[340px] sm:w-[58vw] lg:w-[calc((100%-1.25rem)/2)] lg:max-w-none"
             >
-              <FeaturedScoopCard post={post} />
+              <FeaturedScoopCard post={post} reaction={reactions?.[post.id] ?? null} />
             </div>
           ))}
         </div>

@@ -36,10 +36,14 @@ export default async function DashboardPage({ searchParams }: PageProps) {
     return <WelcomeName />
   }
 
-  const [posts, allPosts] = await Promise.all([filterPosts(category, q), getPosts()])
+  const [rawPosts, allPosts] = await Promise.all([filterPosts(category, q), getPosts()])
 
   const savedIds = new Set(user?.savedPostIds ?? [])
+  const likedIds = new Set(user?.likedPostIds ?? [])
+  const dislikedIds = new Set(user?.dislikedPostIds ?? [])
   const savedPosts = allPosts.filter((p) => savedIds.has(p.id))
+
+  const posts = rawPosts.filter((p) => !dislikedIds.has(p.id))
 
   const firstName = user?.name?.split(' ')[0] ?? 'there'
   const isAllView = !category || category === 'all'
@@ -112,7 +116,13 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                   {featuredPool.length > 0 && (
                     <section>
                       <h2 className="text-[14px] font-medium text-zinc-700 mb-3">New scoop</h2>
-                      <NewScoopCarousel posts={featuredPool} />
+                      <NewScoopCarousel
+                        posts={featuredPool}
+                        reactions={Object.fromEntries([
+                          ...Array.from(likedIds).map((id) => [id, 'like'] as const),
+                          ...Array.from(dislikedIds).map((id) => [id, 'dislike'] as const),
+                        ])}
+                      />
                     </section>
                   )}
 
@@ -125,6 +135,13 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                             key={post.id}
                             post={post}
                             saved={savedIds.has(post.id)}
+                            reaction={
+                              likedIds.has(post.id)
+                                ? 'like'
+                                : dislikedIds.has(post.id)
+                                  ? 'dislike'
+                                  : null
+                            }
                           />
                         ))}
                       </div>

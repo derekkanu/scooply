@@ -98,6 +98,27 @@ export async function markPostViewed(postId: string) {
   await updateUserSession({ viewedPostIds: Array.from(existing) })
 }
 
+export type PostReaction = 'like' | 'dislike'
+
+export async function setPostReaction(postId: string, reaction: PostReaction | null) {
+  if (typeof postId !== 'string' || !postId) return
+  if (reaction !== null && reaction !== 'like' && reaction !== 'dislike') return
+  const current = await getUserSession()
+  if (!current) return
+  const liked = new Set(current.likedPostIds ?? [])
+  const disliked = new Set(current.dislikedPostIds ?? [])
+  liked.delete(postId)
+  disliked.delete(postId)
+  if (reaction === 'like') liked.add(postId)
+  else if (reaction === 'dislike') disliked.add(postId)
+  await updateUserSession({
+    likedPostIds: Array.from(liked),
+    dislikedPostIds: Array.from(disliked),
+  })
+  revalidatePath('/dashboard')
+  revalidatePath('/saved')
+}
+
 export async function toggleSavedPost(postId: string) {
   if (typeof postId !== 'string' || !postId) return
   const current = await getUserSession()

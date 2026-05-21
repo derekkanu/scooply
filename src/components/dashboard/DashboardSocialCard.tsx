@@ -1,10 +1,13 @@
 import type { Post, Source } from '@/lib/types'
+import type { PostReaction } from '@/lib/actions'
 import TrackedPostLink from '@/components/TrackedPostLink'
 import SaveScoopButton from './SaveScoopButton'
+import ReactionButtons from './ReactionButtons'
 
 interface DashboardSocialCardProps {
   post: Post
   saved: boolean
+  reaction?: PostReaction | null
 }
 
 const AVATAR_PALETTES: Array<{ from: string; to: string; fg: string }> = [
@@ -100,16 +103,17 @@ function PlatformBadge({ source }: { source: Source }) {
   return <span className={`${common} bg-zinc-700`} />
 }
 
-export default function DashboardSocialCard({ post, saved }: DashboardSocialCardProps) {
+export default function DashboardSocialCard({ post, saved, reaction = null }: DashboardSocialCardProps) {
   const handle = post.sourceHandle ?? '@scooply'
   const seed = handle + post.id
   const initials = initialsFor(handle)
   return (
     <div className="relative rounded-3xl border border-zinc-400/40 bg-white/15 hover:bg-white/30 backdrop-blur-[2px] transition-colors">
-      <div className="absolute top-3 right-3 z-10">
+      <div className="absolute top-3 right-3 z-10 flex items-center gap-1">
+        <ReactionButtons postId={post.id} initialReaction={reaction} />
         <SaveScoopButton postId={post.id} initialSaved={saved} />
       </div>
-      <TrackedPostLink postId={post.id} href={post.sourceUrl} className="block p-5 pr-14">
+      <TrackedPostLink postId={post.id} href={post.sourceUrl} className="block p-5 pr-32">
         <div className="flex items-center gap-3">
           <div className="relative">
             <Avatar seed={seed} initials={initials} />

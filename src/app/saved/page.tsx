@@ -24,6 +24,8 @@ export default async function SavedScoopsPage() {
 
   const allPosts = await getPosts()
   const savedIds = new Set(user.savedPostIds ?? [])
+  const likedIds = new Set(user.likedPostIds ?? [])
+  const dislikedIds = new Set(user.dislikedPostIds ?? [])
   const savedPosts = allPosts.filter((p) => savedIds.has(p.id))
 
   return (
@@ -70,7 +72,18 @@ export default async function SavedScoopsPage() {
             ) : (
               <div className="flex flex-col gap-5">
                 {savedPosts.map((post) => (
-                  <DashboardSocialCard key={post.id} post={post} saved />
+                  <DashboardSocialCard
+                    key={post.id}
+                    post={post}
+                    saved
+                    reaction={
+                      likedIds.has(post.id)
+                        ? 'like'
+                        : dislikedIds.has(post.id)
+                          ? 'dislike'
+                          : null
+                    }
+                  />
                 ))}
               </div>
             )}
