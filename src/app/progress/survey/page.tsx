@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { getUserSession } from '@/lib/auth'
-import { saveSurveyResults, userLogout } from '@/lib/actions'
+import { userLogout } from '@/lib/actions'
 import CategorySidebar from '@/components/CategorySidebar'
-import SurveyForm from '@/components/progress/SurveyForm'
+import ChatSurvey from '@/components/progress/ChatSurvey'
 
 function MobileTopBar() {
   return (
@@ -43,12 +43,11 @@ export default async function SurveyPage() {
               </Link>
               <h1 className="text-3xl font-bold text-zinc-900">Proficiency survey</h1>
               <p className="text-zinc-500 mt-1.5 text-sm max-w-2xl">
-                Quick self-rating per category. We&apos;ll use this to score where you are and surface stories that fit
-                your level.
+                Chat with Scout — Scooply&apos;s AI guide. A few questions and your level + interests are dialled in.
               </p>
             </header>
 
-            <SurveyForm initial={user.categoryProficiency} action={saveSurveyResults} />
+            <ChatSurvey />
           </div>
         </main>
       </div>

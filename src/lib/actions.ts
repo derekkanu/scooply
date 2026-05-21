@@ -15,13 +15,11 @@ import {
   type Proficiency,
 } from './auth'
 import { ALL_PLATFORM_IDS, INTEREST_OPTIONS, PROFICIENCY_OPTIONS } from './signup'
-import { categories } from './categories'
 import type { Source } from './types'
 
 const VALID_PROFICIENCIES = new Set<Proficiency>(PROFICIENCY_OPTIONS.map((o) => o.id))
 const VALID_INTERESTS = new Set<string>(INTEREST_OPTIONS.map((o) => o.id))
 const VALID_PLATFORMS = new Set<Source>(ALL_PLATFORM_IDS)
-const VALID_CATEGORY_IDS = new Set<string>(categories.map((c) => c.id))
 
 export async function adminLogin(formData: FormData) {
   const password = formData.get('password') as string
@@ -129,20 +127,6 @@ export async function toggleSavedPost(postId: string) {
   await updateUserSession({ savedPostIds: Array.from(existing) })
   revalidatePath('/dashboard')
   revalidatePath('/saved')
-}
-
-export async function saveSurveyResults(formData: FormData) {
-  const map: Record<string, Proficiency> = {}
-  for (const cat of categories) {
-    if (!VALID_CATEGORY_IDS.has(cat.id)) continue
-    const v = formData.get(`prof_${cat.id}`) as string | null
-    if (v && VALID_PROFICIENCIES.has(v as Proficiency)) {
-      map[cat.id] = v as Proficiency
-    }
-  }
-  await updateUserSession({ categoryProficiency: map })
-  revalidatePath('/progress')
-  redirect('/progress?survey=done')
 }
 
 function parseTagsField(raw: string): string[] {
