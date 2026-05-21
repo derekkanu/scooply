@@ -113,13 +113,13 @@ export default function DashboardSocialCard({ post, saved, reaction = null }: Da
         <ReactionButtons postId={post.id} initialReaction={reaction} />
         <SaveScoopButton postId={post.id} initialSaved={saved} />
       </div>
-      <TrackedPostLink postId={post.id} href={post.sourceUrl} className="block p-5 pr-32">
-        <div className="flex items-center gap-3">
+      <TrackedPostLink postId={post.id} href={post.sourceUrl} className="block p-5">
+        <div className="flex items-center gap-3 pr-28">
           <div className="relative">
             <Avatar seed={seed} initials={initials} />
             <PlatformBadge source={post.source} />
           </div>
-          <p className="text-[15px] text-zinc-700">{handle}</p>
+          <p className="text-[15px] text-zinc-700 truncate">{handle}</p>
         </div>
         <h3 className="mt-3 text-[18px] font-semibold text-zinc-900 leading-snug">{post.title}</h3>
         <p className="mt-2 text-[13px] text-zinc-500 leading-relaxed">{post.content}</p>
