@@ -3,9 +3,10 @@ import { redirect } from 'next/navigation'
 import { getUserSession, type Proficiency } from '@/lib/auth'
 import { getPosts } from '@/lib/data'
 import { categories } from '@/lib/categories'
-import { userLogout } from '@/lib/actions'
 import { PROFICIENCY_OPTIONS } from '@/lib/signup'
 import CategorySidebar from '@/components/CategorySidebar'
+import ScooplyLogo from '@/components/ScooplyLogo'
+import MobileMenuDrawer from '@/components/dashboard/MobileMenuDrawer'
 
 interface PageProps {
   searchParams: Promise<{ survey?: string }>
@@ -21,15 +22,13 @@ const PROFICIENCY_PCT: Record<Proficiency, number> = {
   advanced: 100,
 }
 
-function MobileTopBar() {
+function MobileTopBar({ userName }: { userName?: string }) {
   return (
-    <div className="lg:hidden sticky top-0 z-40 bg-[#D9D9D9]/90 backdrop-blur border-b border-zinc-100 px-6 h-14 flex items-center justify-between">
-      <span className="font-bold text-zinc-900">Progress</span>
-      <form action={userLogout}>
-        <button type="submit" className="text-sm font-medium text-zinc-600 hover:text-zinc-900">
-          Sign out
-        </button>
-      </form>
+    <div className="lg:hidden sticky top-0 z-40 bg-[#D9D9D9]/90 backdrop-blur px-6 h-16 flex items-center justify-between">
+      <Link href="/dashboard" className="inline-flex items-center" aria-label="Scooply home">
+        <ScooplyLogo size={26} showWordmark={false} />
+      </Link>
+      <MobileMenuDrawer activeKey="progress" userName={userName} />
     </div>
   )
 }
@@ -137,7 +136,7 @@ export default async function ProgressPage({ searchParams }: PageProps) {
       <CategorySidebar activeKey="progress" userName={user.name} />
 
       <div className="flex-1 min-w-0 flex flex-col">
-        <MobileTopBar />
+        <MobileTopBar userName={user.name} />
 
         <main className="flex-1 px-6 lg:px-10 xl:px-14 py-8 lg:py-12">
           <div className="max-w-4xl mx-auto space-y-6">
