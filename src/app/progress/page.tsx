@@ -150,7 +150,7 @@ export default async function ProgressPage({ searchParams }: PageProps) {
               </div>
               <Link
                 href="/progress/survey"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-black text-white text-sm font-semibold hover:bg-zinc-800 transition-colors whitespace-nowrap"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-black text-white text-sm font-semibold hover:bg-zinc-800 transition-colors whitespace-nowrap"
               >
                 {surveyed ? 'Retake survey' : 'Take proficiency survey'}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

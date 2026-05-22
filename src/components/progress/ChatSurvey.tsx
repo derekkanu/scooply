@@ -125,7 +125,7 @@ export default function ChatSurvey() {
           placeholder={completeSummary ? 'Survey complete' : 'Type your reply…'}
           rows={1}
           disabled={sending || !!completeSummary}
-          className="flex-1 resize-none rounded-2xl bg-zinc-100 px-4 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/10 disabled:opacity-60"
+          className="flex-1 resize-none rounded-2xl bg-zinc-100 px-4 py-2.5 text-base sm:text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/10 disabled:opacity-60"
         />
         <button
           type="submit"
