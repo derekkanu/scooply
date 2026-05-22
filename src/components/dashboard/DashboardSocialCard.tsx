@@ -3,6 +3,7 @@ import type { PostReaction } from '@/lib/actions'
 import TrackedPostLink from '@/components/TrackedPostLink'
 import SaveScoopButton from './SaveScoopButton'
 import ReactionButtons from './ReactionButtons'
+import ListenButton from './ListenButton'
 
 interface DashboardSocialCardProps {
   post: Post
@@ -110,11 +111,12 @@ export default function DashboardSocialCard({ post, saved, reaction = null }: Da
   return (
     <div className="relative rounded-3xl border border-zinc-400/40 bg-white/15 hover:bg-white/30 backdrop-blur-[2px] transition-colors">
       <div className="absolute top-3 right-3 z-10 flex items-center gap-1">
+        <ListenButton title={post.title} content={post.content} />
         <ReactionButtons postId={post.id} initialReaction={reaction} />
         <SaveScoopButton postId={post.id} initialSaved={saved} />
       </div>
       <TrackedPostLink postId={post.id} href={post.sourceUrl} className="block p-5">
-        <div className="flex items-center gap-3 pr-28">
+        <div className="flex items-center gap-3 pr-40">
           <div className="relative">
             <Avatar seed={seed} initials={initials} />
             <PlatformBadge source={post.source} />
