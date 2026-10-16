@@ -8,7 +8,7 @@ import SearchBar from '@/components/SearchBar'
 import ScooplyLogo from '@/components/ScooplyLogo'
 import WelcomeName from '@/components/dashboard/WelcomeName'
 import DashboardSocialCard from '@/components/dashboard/DashboardSocialCard'
-import NewScoopCarousel from '@/components/dashboard/NewScoopCarousel'
+import Briefing, { BriefingHeadline } from '@/components/dashboard/Briefing'
 import SavedSoopCard from '@/components/dashboard/SavedSoopCard'
 import MobileMenuDrawer from '@/components/dashboard/MobileMenuDrawer'
 import MobileCategoryPills from '@/components/dashboard/MobileCategoryPills'
@@ -53,12 +53,14 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   const isAllView = !category || category === 'all'
   const activeCategory = getCategoryById(category ?? '')
 
-  // New scoop leads with photo and video posts; text posts fill any remaining spots.
-  const featuredPool = isAllView
-    ? [...posts.filter((p) => p.imageUrl), ...posts.filter((p) => !p.imageUrl)].slice(0, 8)
-    : []
-  const featuredIds = new Set(featuredPool.map((p) => p.id))
-  const wallPosts = posts.filter((p) => !featuredIds.has(p.id))
+  // The briefing leads with a photo or video post, then four more that are moving now;
+  // everything else goes to the wall.
+  const briefPool = isAllView && !q ? [...posts.filter((p) => p.imageUrl), ...posts.filter((p) => !p.imageUrl)].slice(0, 5) : []
+  const [lead, ...moving] = briefPool
+  const briefIds = new Set(briefPool.map((p) => p.id))
+  const wallPosts = posts.filter((p) => !briefIds.has(p.id))
+  const viewedIds = user?.viewedPostIds ?? []
+  const newCount = allPosts.filter((p) => !viewedIds.includes(p.id)).length
 
   return (
     <div className="min-h-screen sc-field flex">
@@ -67,21 +69,32 @@ export default async function DashboardPage({ searchParams }: PageProps) {
       <div className="flex-1 min-w-0 flex flex-col">
         <MobileTopBar activeKey={category ?? 'all'} userName={user?.name} />
 
-        <main className="flex-1 px-6 lg:px-12 xl:px-16 pt-4 pb-10 lg:py-14">
+        <main className="flex-1 px-6 lg:px-12 xl:px-16 pt-4 pb-10 lg:pt-8 lg:pb-14">
+          {lead && <BriefingHeadline firstName={firstName} />}
+          {lead && (
+            <div className="max-w-6xl mx-auto mt-4 mb-14 lg:mt-6 lg:mb-20">
+              <Briefing
+                lead={lead}
+                moving={moving}
+                allPosts={allPosts}
+                viewedIds={viewedIds}
+                savedCount={savedPosts.length}
+                newCount={newCount}
+                level={user?.proficiency}
+              />
+            </div>
+          )}
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-10 lg:gap-14">
             {/* Center column */}
             <div className="min-w-0 space-y-6 lg:space-y-8">
-              <header>
+              <header className={lead ? 'hidden' : ''}>
                 {isAllView ? (
                   <>
                     <h1 className="font-display text-[32px] sm:text-[40px] lg:text-[44px] leading-[1.05] text-ink">
                       Hello {firstName}
                     </h1>
                     <p className="text-ink-3 mt-3 text-[15px] leading-relaxed max-w-2xl">
-                      You&apos;re building solid AI literacy habits. This week you explored{' '}
-                      <span className="font-semibold text-ink">{Math.min(posts.length, 12)}</span> stories out of the{' '}
-                      <span className="font-semibold text-ink">{allPosts.length}</span> we curated, focus more
-                      on emerging tech to round out your knowledge.
+                      {posts.length} {posts.length === 1 ? 'story matches' : 'stories match'} your search.
                     </p>
                   </>
                 ) : (
@@ -119,22 +132,9 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                 </div>
               ) : (
                 <>
-                  {featuredPool.length > 0 && (
-                    <section>
-                      <Eyebrow framed className="mb-4">New scoop</Eyebrow>
-                      <NewScoopCarousel
-                        posts={featuredPool}
-                        reactions={Object.fromEntries([
-                          ...Array.from(likedIds).map((id) => [id, 'like'] as const),
-                          ...Array.from(dislikedIds).map((id) => [id, 'dislike'] as const),
-                        ])}
-                      />
-                    </section>
-                  )}
-
                   {wallPosts.length > 0 && (
-                    <section>
-                      <Eyebrow framed className="mb-4">Your wall</Eyebrow>
+                    <section id="wall" className="scroll-mt-24">
+                      <h2 className="mb-5 font-display text-[24px] leading-[1.2] text-ink">Your wall</h2>
                       {/* masonry: cards keep their natural height and stack down two columns */}
                       <div className="columns-1 gap-4 sm:columns-2">
                         {wallPosts.map((post, i) => (
@@ -160,7 +160,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
             </div>
 
             {/* Right column — desktop only; mobile uses inline search + drawer for saved */}
-            <aside className="hidden lg:block space-y-5 lg:sticky lg:top-6 lg:self-start">
+            <aside className="hidden lg:block space-y-5 lg:sticky lg:top-40 lg:self-start">
               <Suspense>
                 <SearchBar defaultValue={q} />
               </Suspense>

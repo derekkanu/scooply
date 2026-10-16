@@ -7,6 +7,7 @@ import PlatformIcon from '@/components/PlatformIcon'
 import Illustration from '@/components/illustrations/Illustration'
 import HeroActions from '@/components/landing/HeroActions'
 import NarrativeHeadline from '@/components/landing/NarrativeHeadline'
+import ScrollRipple from '@/components/landing/ScrollRipple'
 import HeroStrip from '@/components/landing/HeroStrip'
 import ProcessSteps from '@/components/landing/ProcessSteps'
 import LandingHeader, { type NavItem } from '@/components/landing/LandingHeader'
@@ -28,7 +29,7 @@ const NAV: NavItem[] = [
   { href: '#faq', label: 'FAQ' },
 ]
 
-const H2 = 'sc-scroll mx-auto max-w-[22ch] text-balance text-center font-display text-[2rem] leading-[1.18] text-ink sm:text-[2.5rem] sm:leading-[1.12]'
+const H2 = 'sc-scroll sc-ripple mx-auto max-w-[22ch] text-balance text-center font-display text-[2rem] leading-[1.18] text-ink sm:text-[2.5rem] sm:leading-[1.12]'
 const SECTION = 'scroll-mt-16 px-5 py-24 sm:px-10 lg:px-16 lg:py-32'
 
 export default async function LandingPage() {
@@ -38,6 +39,7 @@ export default async function LandingPage() {
   return (
     <div className="relative min-h-screen bg-parchment">
       <SplashOverlay />
+      <ScrollRipple />
       <LandingHeader items={NAV} />
 
       <main>
@@ -45,10 +47,10 @@ export default async function LandingPage() {
         <section id="top" className="pt-12 sm:pt-16 lg:pt-20">
           <div className="mx-auto grid max-w-[1160px] grid-cols-1 items-end gap-8 px-5 sm:px-10 lg:grid-cols-[1.35fr_1fr] lg:gap-16">
             <LandingReveal delay={150}>
-              <NarrativeHeadline className="sc-drift" />
+              <NarrativeHeadline className="sc-drift sc-ripple" />
             </LandingReveal>
             <LandingReveal delay={400} className="lg:pb-3">
-              <p className="sc-drift max-w-[36ch] text-[18px] leading-snug text-ink [--sc-drift:40px] sm:text-[20px]">
+              <p className="sc-drift sc-ripple max-w-[36ch] text-[18px] leading-snug text-ink [--sc-drift:40px] sm:text-[20px]">
                 Scooply reads every platform, every day, and keeps only the AI stories that fit your level and your interests.
               </p>
               <div className="mt-7">
@@ -99,16 +101,18 @@ export default async function LandingPage() {
 
         {/* 3 · In action */}
         <section id="in-action" className={SECTION}>
-          <div className="mx-auto max-w-[1000px]">
-            <h2 className={H2}>
-              Scooply <em>in action</em>
-            </h2>
-            <p className="sc-scroll mx-auto mt-4 max-w-[44ch] text-center text-[15px] text-ink-3">
-              Real scoops from the feed. Reading for something else? Tell us and we’ll build it in.
-            </p>
-            <div className="mt-16 lg:mt-20">
-              <InAction />
+          {/* left-aligned and set as a ledger, unlike the centred sections around it */}
+          <div className="mx-auto max-w-[1160px]">
+            <div className="sc-scroll sc-ripple grid grid-cols-1 gap-4 pb-10 md:grid-cols-[150px_minmax(0,1fr)_minmax(0,1.15fr)] md:gap-10 md:pb-14">
+              <p className="text-[13px] text-ink-3">In action</p>
+              <h2 className="font-display text-[2rem] leading-[1.15] text-ink sm:text-[2.5rem] sm:leading-[1.1]">
+                What a morning on Scooply looks like
+              </h2>
+              <p className="max-w-[40ch] self-end text-[15px] leading-relaxed text-ink-3">
+                Three things it does for you, shown working. Reading for something else? Tell us and we’ll build it in.
+              </p>
             </div>
+            <InAction />
           </div>
         </section>
 
@@ -123,7 +127,7 @@ export default async function LandingPage() {
             <div className="mt-14">
               <LevelCards />
             </div>
-            <div className="sc-scroll mt-16 grid grid-cols-1 gap-8 border-t border-line-strong pt-10 md:grid-cols-[1fr_1.4fr] md:gap-16">
+            <div className="sc-scroll sc-ripple mt-16 grid grid-cols-1 gap-8 border-t border-line-strong pt-10 md:grid-cols-[1fr_1.4fr] md:gap-16">
               <h3 className="font-display text-[2rem] leading-[1.1] text-ink sm:text-[2.6rem]">
                 Scooply grows <em>with you.</em>
               </h3>
@@ -154,7 +158,7 @@ export default async function LandingPage() {
         <section id="faq" className={SECTION}>
           <div className="mx-auto grid max-w-[1000px] grid-cols-1 gap-10 md:grid-cols-[1fr_1.6fr] md:gap-16">
             <div>
-              <h2 className="sc-scroll max-w-[14ch] font-display text-[2.2rem] leading-[1.1] text-ink sm:text-[3rem]">
+              <h2 className="sc-scroll sc-ripple max-w-[14ch] font-display text-[2.2rem] leading-[1.1] text-ink sm:text-[3rem]">
                 Everything you <em>need to know</em>
               </h2>
             </div>
@@ -165,7 +169,7 @@ export default async function LandingPage() {
         {/* Closing call to action */}
         <section id="join" className="scroll-mt-16 px-5 pb-24 sm:px-10 lg:px-16 lg:pb-32">
           <div
-            className="sc-scroll mx-auto flex max-w-[1000px] flex-col items-center rounded-[24px] px-6 py-16 text-center sm:py-20"
+            className="sc-scroll sc-ripple mx-auto flex max-w-[1000px] flex-col items-center rounded-[24px] px-6 py-16 text-center sm:py-20"
             style={{ background: 'var(--sc-ink)', color: 'var(--sc-parchment)' }}
           >
             <Illustration name="sphere" size={150} tint="var(--sc-parchment)" />

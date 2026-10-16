@@ -482,6 +482,9 @@ body {
 @keyframes sc-turn {
   to { rotate: 14deg; }
 }
+@keyframes sc-shrink {
+  to { font-size: var(--sc-shrink-to, 28px); }
+}
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
@@ -492,9 +495,13 @@ body {
       animation-timeline: view(), view();
       animation-range: entry 0% cover 28%, exit 35% exit 100%;
     }
-    [data-dir="left"].sc-scroll, .sc-scroll-group > :nth-child(3n + 1) { --sc-sx: -22px; --sc-sy: 14px; }
-    [data-dir="right"].sc-scroll, .sc-scroll-group > :nth-child(3n) { --sc-sx: 22px; --sc-sy: 14px; }
-    [data-dir="up"].sc-scroll { --sc-sx: 0; --sc-sy: 28px; }
+    /* sideways entrances from tablet up; on phones every block rises straight up, so
+       nothing ever starts past the screen edge and widens the page */
+    @media (min-width: 640px) {
+      [data-dir="left"].sc-scroll, .sc-scroll-group > :nth-child(3n + 1) { --sc-sx: -22px; --sc-sy: 14px; }
+      [data-dir="right"].sc-scroll, .sc-scroll-group > :nth-child(3n) { --sc-sx: 22px; --sc-sy: 14px; }
+      [data-dir="up"].sc-scroll { --sc-sx: 0; --sc-sy: 28px; }
+    }
 
     .sc-parallax {
       animation: sc-parallax linear both;
@@ -509,7 +516,22 @@ body {
       animation-range: 0 90vh;
     }
     .sc-turn { animation-name: sc-turn; }
+
+    /* the dashboard greeting eases down to a compact size as it pins */
+    .sc-shrink {
+      animation: sc-shrink linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 240px;
+    }
   }
+}
+
+/* ── Scroll ripple — landing page (see components/landing/ScrollRipple.tsx) ───
+   While the page is moving, content blocks marked .sc-ripple pass through a displacement
+   filter whose depth follows scroll speed. At rest the class is gone and so is the filter. */
+
+.sc-rippling .sc-ripple {
+  filter: url(#sc-ripple);
 }
 
 /* ── Page transitions — a soft cross-fade between routes (see app/template.tsx) ─ */

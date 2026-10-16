@@ -22,7 +22,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${interTight.variable} h-full antialiased`}>
-      <body className="min-h-full overflow-x-clip">{children}</body>
+      <body className="min-h-full overflow-x-clip">
+        {/* iOS ignores overflow on <body>, so the page itself clips anything wider than the
+            screen; clip (not hidden) keeps sticky headers and sidebars working */}
+        <div className="min-h-full overflow-x-clip">{children}</div>
+      </body>
     </html>
   )
 }

@@ -13,7 +13,7 @@ export default function ProcessSteps() {
   return (
     <ol className="sc-scroll-group grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
       {STEPS.map((s) => (
-        <li key={s.title} className="flex flex-col">
+        <li key={s.title} className="sc-ripple flex flex-col">
           <Illustration name={s.art} size={128} className="-ml-3" />
           <h3 className="mt-6 text-[19px] leading-tight tracking-[-0.005em] text-ink">{s.title}</h3>
           <p className="mt-3 max-w-[32ch] text-[15px] leading-relaxed text-ink-3">{s.body}</p>

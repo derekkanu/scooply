@@ -45,7 +45,7 @@ export default function TwoWays() {
         title={way.title}
         body={way.body}
         cta={{ label: 'Learn more', href: way.href }}
-        className="sc-scroll"
+        className="sc-scroll sc-ripple"
       />
     </div>
   )

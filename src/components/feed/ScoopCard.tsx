@@ -93,7 +93,7 @@ export default function ScoopCard({ post, saved = false, reaction = null, size =
       <TrackedPostLink postId={post.id} href={post.sourceUrl} className="mt-4 flex min-h-0 flex-1 flex-col">
         <h3
           className={`font-display leading-[1.08] ${
-            featured ? 'line-clamp-3 text-[25px]' : tile ? (bigTitle ? 'text-[32px] leading-[1.02]' : 'text-[24px]') : 'text-[26px] sm:text-[30px]'
+            featured ? 'line-clamp-3 text-[25px]' : tile ? (bigTitle ? 'text-[26px] leading-[1.05] sm:text-[32px] sm:leading-[1.02]' : 'text-[22px] sm:text-[24px]') : 'text-[26px] sm:text-[30px]'
           }`}
         >
           {post.title}
