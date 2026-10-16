@@ -8,13 +8,13 @@ const STEPS: { art: SpriteId; title: string; body: string }[] = [
   { art: 'mug', title: 'Read your scoop', body: 'A short preview first, then straight to the original post when you want more.' },
 ]
 
-/** Four process columns: an engraving, an title, a short line of body copy. */
+/** Four process columns: an engraving, a title, a short line of body copy. Centred on phones. */
 export default function ProcessSteps() {
   return (
     <ol className="sc-scroll-group grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
       {STEPS.map((s) => (
-        <li key={s.title} className="sc-ripple flex flex-col">
-          <Illustration name={s.art} size={128} className="-ml-3" />
+        <li key={s.title} className="sc-ripple flex flex-col items-center text-center sm:items-start sm:text-left">
+          <Illustration name={s.art} size={128} className="sm:-ml-3" />
           <h3 className="mt-6 text-[19px] leading-tight tracking-[-0.005em] text-ink">{s.title}</h3>
           <p className="mt-3 max-w-[32ch] text-[15px] leading-relaxed text-ink-3">{s.body}</p>
         </li>

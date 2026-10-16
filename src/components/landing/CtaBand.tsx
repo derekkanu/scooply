@@ -6,7 +6,7 @@ import { ArrowRight } from '@/components/ui/icons'
 export default function CtaBand() {
   return (
     <div className="border-y border-line px-5 sm:px-10">
-      <div className="sc-scroll sc-ripple mx-auto flex max-w-[1000px] flex-col items-start justify-between gap-4 py-6 sm:flex-row sm:items-center">
+      <div className="sc-scroll sc-ripple mx-auto flex max-w-[1000px] flex-col items-center justify-between gap-4 py-8 text-center sm:flex-row sm:py-6 sm:text-left">
         <p className="font-display text-[24px] leading-tight text-ink sm:text-[28px]">
           All of AI, <em>one calm feed.</em>
         </p>
