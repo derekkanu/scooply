@@ -8,10 +8,14 @@ import SearchBar from '@/components/SearchBar'
 import ScooplyLogo from '@/components/ScooplyLogo'
 import WelcomeName from '@/components/dashboard/WelcomeName'
 import DashboardSocialCard from '@/components/dashboard/DashboardSocialCard'
-import NewScoopCarousel from '@/components/dashboard/NewScoopCarousel'
+import Briefing, { BriefingHeadline } from '@/components/dashboard/Briefing'
 import SavedSoopCard from '@/components/dashboard/SavedSoopCard'
 import MobileMenuDrawer from '@/components/dashboard/MobileMenuDrawer'
 import MobileCategoryPills from '@/components/dashboard/MobileCategoryPills'
+import Eyebrow from '@/components/ui/Eyebrow'
+import Orb, { CATEGORY_ORB } from '@/components/ui/Orb'
+import Reveal from '@/components/ui/Reveal'
+import Illustration from '@/components/illustrations/Illustration'
 
 interface PageProps {
   searchParams: Promise<{ category?: string; q?: string }>
@@ -19,7 +23,7 @@ interface PageProps {
 
 function MobileTopBar({ activeKey, userName }: { activeKey: string; userName?: string }) {
   return (
-    <div className="lg:hidden sticky top-0 z-40 bg-[#D9D9D9]/90 backdrop-blur px-6 h-16 flex items-center justify-between">
+    <div className="lg:hidden sticky top-0 z-40 sc-glass border-b border-line px-6 h-16 flex items-center justify-between">
       <Link href="/dashboard" className="inline-flex items-center" aria-label="Scooply home">
         <ScooplyLogo size={26} showWordmark={false} />
       </Link>
@@ -49,48 +53,69 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   const isAllView = !category || category === 'all'
   const activeCategory = getCategoryById(category ?? '')
 
-  const featuredPool = isAllView ? posts.slice(0, Math.min(posts.length, 8)) : []
-  const featuredIds = new Set(featuredPool.map((p) => p.id))
-  const wallPosts = posts.filter((p) => !featuredIds.has(p.id))
+  // The briefing leads with a photo or video post, then four more that are moving now;
+  // everything else goes to the wall.
+  const briefPool = isAllView && !q ? [...posts.filter((p) => p.imageUrl), ...posts.filter((p) => !p.imageUrl)].slice(0, 5) : []
+  const [lead, ...moving] = briefPool
+  const briefIds = new Set(briefPool.map((p) => p.id))
+  const wallPosts = posts.filter((p) => !briefIds.has(p.id))
+  const viewedIds = user?.viewedPostIds ?? []
+  const newCount = allPosts.filter((p) => !viewedIds.includes(p.id)).length
 
   return (
-    <div className="min-h-screen bg-[#D9D9D9] flex">
+    <div className="min-h-screen sc-field flex">
       <CategorySidebar activeKey={category ?? 'all'} userName={user?.name} />
 
       <div className="flex-1 min-w-0 flex flex-col">
         <MobileTopBar activeKey={category ?? 'all'} userName={user?.name} />
 
-        <main className="flex-1 px-6 lg:px-12 xl:px-16 pt-4 pb-10 lg:py-14">
+        <main className="flex-1 px-6 lg:px-12 xl:px-16 pt-4 pb-10 lg:pt-8 lg:pb-14">
+          {lead && (
+            <BriefingHeadline firstName={firstName}>
+              <MobileCategoryPills active={category ?? 'all'} />
+              <Suspense>
+                <SearchBar defaultValue={q} />
+              </Suspense>
+            </BriefingHeadline>
+          )}
+          {lead && (
+            <div className="max-w-6xl mx-auto mt-4 mb-14 lg:mt-6 lg:mb-20">
+              <Briefing
+                lead={lead}
+                moving={moving}
+                allPosts={allPosts}
+                viewedIds={viewedIds}
+                savedCount={savedPosts.length}
+                newCount={newCount}
+                level={user?.proficiency}
+              />
+            </div>
+          )}
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-10 lg:gap-14">
             {/* Center column */}
             <div className="min-w-0 space-y-6 lg:space-y-8">
-              <header>
+              <header className={lead ? 'hidden' : ''}>
                 {isAllView ? (
                   <>
-                    <h1 className="text-[32px] sm:text-[40px] lg:text-[44px] leading-[1.05] font-bold text-zinc-900 tracking-tight">
+                    <h1 className="font-display text-[32px] sm:text-[40px] lg:text-[44px] leading-[1.05] text-ink">
                       Hello {firstName}
                     </h1>
-                    <p className="text-zinc-500 mt-3 text-[15px] leading-relaxed max-w-2xl">
-                      You&apos;re building solid AI literacy habits. This week you explored{' '}
-                      <span className="font-semibold text-red-500">{Math.min(posts.length, 12)}</span> stories out of the{' '}
-                      <span className="font-semibold text-emerald-500">{allPosts.length}</span> we curated, focus more
-                      on emerging tech to round out your knowledge.
+                    <p className="text-ink-3 mt-3 text-[15px] leading-relaxed max-w-2xl">
+                      {posts.length} {posts.length === 1 ? 'story matches' : 'stories match'} your search.
                     </p>
                   </>
                 ) : (
                   <>
-                    <p
-                      className="text-[11px] font-bold tracking-[0.14em] uppercase"
-                      style={{ color: activeCategory?.color ?? '#3B82F6' }}
-                    >
-                      {activeCategory?.name ?? 'Filtered'}
-                    </p>
-                    <h1 className="text-[32px] sm:text-[40px] lg:text-[44px] leading-[1.05] font-bold text-zinc-900 tracking-tight mt-1">
+                    <Eyebrow framed className="gap-2">
+                      <Orb palette={CATEGORY_ORB[activeCategory?.id ?? ''] ?? 'mono'} size={12} />
+                      Category
+                    </Eyebrow>
+                    <h1 className="font-display mt-4 text-[32px] sm:text-[40px] lg:text-[44px] leading-[1.05] text-ink">
                       {activeCategory?.name ?? 'Stories'}
                     </h1>
-                    <p className="text-zinc-500 mt-3 text-[15px] leading-relaxed max-w-2xl">
+                    <p className="text-ink-3 mt-3 text-[15px] leading-relaxed max-w-2xl">
                       {activeCategory?.description ?? 'Showing posts in this category.'}{' '}
-                      <span className="text-zinc-400">
+                      <span className="text-ink-4">
                         ({posts.length} {posts.length === 1 ? 'story' : 'stories'})
                       </span>
                     </p>
@@ -98,8 +123,8 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                 )}
               </header>
 
-              {/* Mobile-only nav + search row */}
-              <div className="lg:hidden space-y-4">
+              {/* Mobile-only nav + search row (pinned inside the greeting when the briefing shows) */}
+              <div className={`lg:hidden space-y-4 ${lead ? 'hidden' : ''}`}>
                 <MobileCategoryPills active={category ?? 'all'} />
                 <Suspense>
                   <SearchBar defaultValue={q} />
@@ -107,32 +132,21 @@ export default async function DashboardPage({ searchParams }: PageProps) {
               </div>
 
               {posts.length === 0 ? (
-                <div className="rounded-3xl border border-zinc-400/40 bg-white/15 backdrop-blur-[2px] flex flex-col items-center justify-center py-24 text-zinc-500">
-                  <p className="text-base font-medium">No posts found</p>
-                  <p className="text-sm mt-1 text-zinc-400">Try a different search or category.</p>
+                <div className="sc-card rounded-[24px] flex flex-col items-center justify-center gap-1 py-24 text-ink-3">
+                  <Illustration name="magnifier" size={140} className="mb-3" />
+                  <p className="text-body font-medium text-ink-2">No posts found</p>
+                  <p className="text-small text-ink-4">Try a different search or category.</p>
                 </div>
               ) : (
                 <>
-                  {featuredPool.length > 0 && (
-                    <section>
-                      <h2 className="text-[14px] font-medium text-zinc-700 mb-3">New scoop</h2>
-                      <NewScoopCarousel
-                        posts={featuredPool}
-                        reactions={Object.fromEntries([
-                          ...Array.from(likedIds).map((id) => [id, 'like'] as const),
-                          ...Array.from(dislikedIds).map((id) => [id, 'dislike'] as const),
-                        ])}
-                      />
-                    </section>
-                  )}
-
                   {wallPosts.length > 0 && (
-                    <section>
-                      <h2 className="text-[14px] font-medium text-zinc-700 mb-3">Your wall</h2>
-                      <div className="flex flex-col gap-5">
-                        {wallPosts.map((post) => (
+                    <section id="wall" className="scroll-mt-24">
+                      <h2 className="mb-5 font-display text-[24px] leading-[1.2] text-ink">Your wall</h2>
+                      {/* masonry: cards keep their natural height and stack down two columns */}
+                      <div className="columns-1 gap-4 sm:columns-2">
+                        {wallPosts.map((post, i) => (
+                          <Reveal key={post.id} delay={Math.min(i, 8) * 70} className="mb-4 break-inside-avoid">
                           <DashboardSocialCard
-                            key={post.id}
                             post={post}
                             saved={savedIds.has(post.id)}
                             reaction={
@@ -143,6 +157,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                                   : null
                             }
                           />
+                          </Reveal>
                         ))}
                       </div>
                     </section>
@@ -152,7 +167,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
             </div>
 
             {/* Right column — desktop only; mobile uses inline search + drawer for saved */}
-            <aside className="hidden lg:block space-y-5 lg:sticky lg:top-6 lg:self-start">
+            <aside className="hidden lg:block space-y-5 lg:sticky lg:top-40 lg:self-start">
               <Suspense>
                 <SearchBar defaultValue={q} />
               </Suspense>

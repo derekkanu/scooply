@@ -9,7 +9,7 @@ import MobileMenuDrawer from '@/components/dashboard/MobileMenuDrawer'
 
 function MobileTopBar({ userName }: { userName?: string }) {
   return (
-    <div className="lg:hidden sticky top-0 z-40 bg-[#D9D9D9]/90 backdrop-blur px-6 h-16 flex items-center justify-between">
+    <div className="lg:hidden sticky top-0 z-40 bg-canvas/90 backdrop-blur px-6 h-16 flex items-center justify-between">
       <Link href="/dashboard" className="inline-flex items-center" aria-label="Scooply home">
         <ScooplyLogo size={26} showWordmark={false} />
       </Link>
@@ -29,16 +29,16 @@ export default async function SavedScoopsPage() {
   const savedPosts = allPosts.filter((p) => savedIds.has(p.id))
 
   return (
-    <div className="min-h-screen bg-[#D9D9D9] flex">
+    <div className="min-h-screen sc-field flex">
       <CategorySidebar activeKey="saved" userName={user.name} />
 
       <div className="flex-1 min-w-0 flex flex-col">
         <MobileTopBar userName={user.name} />
 
         <main className="flex-1 px-6 lg:px-12 xl:px-16 py-10 lg:py-14">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <header className="mb-8">
-              <h1 className="text-[44px] leading-[1.05] font-bold text-zinc-900 tracking-tight">
+              <h1 className="font-display text-[44px] leading-[1.05] text-zinc-900">
                 Saved scoops
               </h1>
               <p className="text-zinc-500 mt-3 text-[15px] leading-relaxed max-w-2xl">
@@ -70,10 +70,10 @@ export default async function SavedScoopsPage() {
                 </Link>
               </div>
             ) : (
-              <div className="flex flex-col gap-5">
+              <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
                 {savedPosts.map((post) => (
+                  <div key={post.id} className="mb-4 break-inside-avoid">
                   <DashboardSocialCard
-                    key={post.id}
                     post={post}
                     saved
                     reaction={
@@ -84,6 +84,7 @@ export default async function SavedScoopsPage() {
                           : null
                     }
                   />
+                  </div>
                 ))}
               </div>
             )}

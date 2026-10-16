@@ -13,7 +13,7 @@ export default async function WaitlistPage({ searchParams }: WaitlistPageProps) 
   const joined = status === 'joined' || status === 'already'
 
   return (
-    <main className="min-h-screen flex flex-col bg-[#D9D9D9] px-4">
+    <main className="min-h-screen flex flex-col sc-field px-4">
       <div className="absolute top-6 left-6">
         <Link
           href="/"
@@ -32,7 +32,7 @@ export default async function WaitlistPage({ searchParams }: WaitlistPageProps) 
             <Link href="/" className="hover:opacity-80 transition-opacity">
               <ScooplyLogo size={44} showWordmark={false} />
             </Link>
-            <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Join the waiting list</h1>
+            <h1 className="font-display text-[32px] text-zinc-900">Join the waiting list</h1>
             <p className="text-sm text-zinc-500 text-center">
               We&apos;ll let you know the moment Scooply opens its doors.
             </p>
@@ -42,11 +42,11 @@ export default async function WaitlistPage({ searchParams }: WaitlistPageProps) 
             {joined ? (
               <div className="flex flex-col items-center text-center gap-3">
                 <div className="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3f6b4f" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h2 className="text-lg font-semibold text-zinc-900">
+                <h2 className="font-display text-[22px] text-zinc-900">
                   {status === 'already' ? "You're already on the list" : "You're on the list"}
                 </h2>
                 <p className="text-sm text-zinc-500">
@@ -66,7 +66,7 @@ export default async function WaitlistPage({ searchParams }: WaitlistPageProps) 
               </div>
             ) : (
               <>
-                <h2 className="text-lg font-semibold text-zinc-900 mb-1">Save your spot</h2>
+                <h2 className="font-display text-[22px] text-zinc-900 mb-1">Save your spot</h2>
                 <p className="text-sm text-zinc-500 mb-6">
                   Drop your email and we&apos;ll send you an invite when we&apos;re ready.
                 </p>
@@ -94,7 +94,7 @@ export default async function WaitlistPage({ searchParams }: WaitlistPageProps) 
 
                 <div className="flex items-center gap-3 my-6">
                   <span className="h-px flex-1 bg-zinc-100" />
-                  <span className="text-[11px] uppercase tracking-[0.14em] text-zinc-400">Already in?</span>
+                  <span className="text-[13px] text-zinc-400">Already in?</span>
                   <span className="h-px flex-1 bg-zinc-100" />
                 </div>
 

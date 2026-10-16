@@ -12,7 +12,7 @@ export default async function AdminPostsPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-900">Posts</h1>
+          <h1 className="font-display text-[32px] text-zinc-900">Posts</h1>
           <p className="text-sm text-zinc-500 mt-1">{posts.length} posts curated</p>
         </div>
         <Link href="/admin/posts/new">
@@ -34,10 +34,10 @@ export default async function AdminPostsPage() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-zinc-100">
-                <th className="text-left px-5 py-3.5 text-xs font-semibold text-zinc-500 uppercase tracking-wide">Source</th>
-                <th className="text-left px-5 py-3.5 text-xs font-semibold text-zinc-500 uppercase tracking-wide">Title</th>
-                <th className="text-left px-5 py-3.5 text-xs font-semibold text-zinc-500 uppercase tracking-wide hidden md:table-cell">Category</th>
-                <th className="text-left px-5 py-3.5 text-xs font-semibold text-zinc-500 uppercase tracking-wide hidden lg:table-cell">Published</th>
+                <th className="text-left px-5 py-3.5 text-xs font-semibold text-zinc-500 tracking-wide">Source</th>
+                <th className="text-left px-5 py-3.5 text-xs font-semibold text-zinc-500 tracking-wide">Title</th>
+                <th className="text-left px-5 py-3.5 text-xs font-semibold text-zinc-500 tracking-wide hidden md:table-cell">Category</th>
+                <th className="text-left px-5 py-3.5 text-xs font-semibold text-zinc-500 tracking-wide hidden lg:table-cell">Published</th>
                 <th className="px-5 py-3.5" />
               </tr>
             </thead>

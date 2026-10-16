@@ -67,7 +67,7 @@ export default function NewScoopCarousel({ posts, reactions }: NewScoopCarouselP
         type="button"
         aria-label="Previous"
         onClick={() => scrollByCard(-1)}
-        className={`hidden lg:inline-flex items-center justify-center absolute -left-10 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full text-zinc-700 hover:text-zinc-900 transition-opacity ${
+        className={`hidden lg:inline-flex items-center justify-center absolute -left-10 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-surface text-ink-2 shadow-hairline hover:text-ink transition-opacity duration-300 ease-soft ${
           canPrev ? 'opacity-100' : 'opacity-25 pointer-events-none'
         }`}
       >
@@ -79,7 +79,7 @@ export default function NewScoopCarousel({ posts, reactions }: NewScoopCarouselP
         type="button"
         aria-label="Next"
         onClick={() => scrollByCard(1)}
-        className={`hidden lg:inline-flex items-center justify-center absolute -right-10 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full text-zinc-700 hover:text-zinc-900 transition-opacity ${
+        className={`hidden lg:inline-flex items-center justify-center absolute -right-10 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-surface text-ink-2 shadow-hairline hover:text-ink transition-opacity duration-300 ease-soft ${
           canNext ? 'opacity-100' : 'opacity-25 pointer-events-none'
         }`}
       >

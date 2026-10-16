@@ -9,6 +9,7 @@ interface TrackedPostLinkProps {
   children: React.ReactNode
   target?: string
   rel?: string
+  'aria-label'?: string
 }
 
 export default function TrackedPostLink({
@@ -18,13 +19,14 @@ export default function TrackedPostLink({
   children,
   target = '_blank',
   rel = 'noopener noreferrer',
+  'aria-label': ariaLabel,
 }: TrackedPostLinkProps) {
   function handleClick() {
     void markPostViewed(postId).catch(() => {})
   }
 
   return (
-    <a href={href} target={target} rel={rel} className={className} onClick={handleClick}>
+    <a href={href} target={target} rel={rel} className={className} onClick={handleClick} aria-label={ariaLabel}>
       {children}
     </a>
   )

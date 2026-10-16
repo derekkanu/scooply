@@ -44,6 +44,16 @@ export async function userLogin(formData: FormData) {
   redirect('/dashboard')
 }
 
+// Names for visitors who explore before signing up; they can change it later in the app.
+const GUEST_NAMES = ['Ada', 'Alan', 'Grace', 'Claude', 'Hedy', 'Kat', 'Linus', 'Marvin', 'Margaret', 'Tim', 'Yann', 'Fei-Fei']
+
+/** Hero "Explore": straight into the dashboard under a random name, no form. */
+export async function exploreAsGuest() {
+  const name = GUEST_NAMES[Math.floor(Math.random() * GUEST_NAMES.length)]
+  await setUserSession({ name })
+  redirect('/dashboard')
+}
+
 export async function setUserName(formData: FormData) {
   const name = formData.get('name') as string
   if (!name?.trim()) {

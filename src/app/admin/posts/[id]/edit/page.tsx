@@ -17,7 +17,7 @@ export default async function EditPostPage({ params }: PageProps) {
   return (
     <div className="max-w-2xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-zinc-900">Edit post</h1>
+        <h1 className="font-display text-[32px] text-zinc-900">Edit post</h1>
         <p className="text-sm text-zinc-500 mt-1 line-clamp-1">{post.title}</p>
       </div>
       <div className="bg-white rounded-2xl shadow-sm p-6">

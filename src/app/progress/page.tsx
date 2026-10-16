@@ -24,7 +24,7 @@ const PROFICIENCY_PCT: Record<Proficiency, number> = {
 
 function MobileTopBar({ userName }: { userName?: string }) {
   return (
-    <div className="lg:hidden sticky top-0 z-40 bg-[#D9D9D9]/90 backdrop-blur px-6 h-16 flex items-center justify-between">
+    <div className="lg:hidden sticky top-0 z-40 bg-canvas/90 backdrop-blur px-6 h-16 flex items-center justify-between">
       <Link href="/dashboard" className="inline-flex items-center" aria-label="Scooply home">
         <ScooplyLogo size={26} showWordmark={false} />
       </Link>
@@ -58,7 +58,7 @@ function CategoryProgressCard({
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="min-w-0">
           <p
-            className="text-[11px] font-bold tracking-[0.14em] uppercase"
+            className="text-[13px] font-bold"
             style={{ color }}
           >
             {name}
@@ -132,7 +132,7 @@ export default async function ProgressPage({ searchParams }: PageProps) {
     .sort((a, b) => a.viewed / a.total - b.viewed / b.total)[0]
 
   return (
-    <div className="min-h-screen bg-[#D9D9D9] flex">
+    <div className="min-h-screen sc-field flex">
       <CategorySidebar activeKey="progress" userName={user.name} />
 
       <div className="flex-1 min-w-0 flex flex-col">
@@ -142,7 +142,7 @@ export default async function ProgressPage({ searchParams }: PageProps) {
           <div className="max-w-4xl mx-auto space-y-6">
             <header className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-zinc-900">Your Progress</h1>
+                <h1 className="font-display text-[38px] text-zinc-900">Your Progress</h1>
                 <p className="text-zinc-500 mt-1.5 text-sm max-w-2xl">
                   How you&apos;ve interacted with stories — per category and cumulatively. Take the proficiency survey
                   any time to recalibrate your levels.
@@ -167,7 +167,7 @@ export default async function ProgressPage({ searchParams }: PageProps) {
 
             <section className="bg-white rounded-3xl shadow-sm p-6 sm:p-8">
               <div className="flex items-baseline justify-between mb-1">
-                <h2 className="text-sm font-semibold text-zinc-900">Cumulative engagement</h2>
+                <h2 className="font-display text-[17px] text-zinc-900">Cumulative engagement</h2>
                 <span className="text-xs text-zinc-400">across all categories</span>
               </div>
               <div className="flex items-baseline gap-3 mt-3">
@@ -188,7 +188,7 @@ export default async function ProgressPage({ searchParams }: PageProps) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
                   {mostExplored && mostExplored.viewed > 0 && (
                     <div className="rounded-2xl bg-zinc-50 px-4 py-3">
-                      <p className="text-[11px] uppercase tracking-wider text-zinc-400">Most explored</p>
+                      <p className="text-[13px] tracking-wider text-zinc-400">Most explored</p>
                       <p className="text-sm font-semibold text-zinc-900 mt-1">{mostExplored.name}</p>
                       <p className="text-xs text-zinc-500">
                         {mostExplored.viewed}/{mostExplored.total} stories
@@ -197,7 +197,7 @@ export default async function ProgressPage({ searchParams }: PageProps) {
                   )}
                   {leastExplored && leastExplored.viewed < leastExplored.total && (
                     <div className="rounded-2xl bg-zinc-50 px-4 py-3">
-                      <p className="text-[11px] uppercase tracking-wider text-zinc-400">Room to explore</p>
+                      <p className="text-[13px] tracking-wider text-zinc-400">Room to explore</p>
                       <p className="text-sm font-semibold text-zinc-900 mt-1">{leastExplored.name}</p>
                       <p className="text-xs text-zinc-500">
                         {leastExplored.viewed}/{leastExplored.total} stories
@@ -216,7 +216,7 @@ export default async function ProgressPage({ searchParams }: PageProps) {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-zinc-900 mb-3 px-1">By category</h2>
+              <h2 className="font-display text-[26px] text-zinc-900 mb-3 px-1">By category</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {data.map((cat) => (
                   <CategoryProgressCard

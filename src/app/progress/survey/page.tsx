@@ -8,7 +8,7 @@ import ChatSurvey from '@/components/progress/ChatSurvey'
 
 function MobileTopBar({ userName }: { userName?: string }) {
   return (
-    <div className="lg:hidden sticky top-0 z-40 bg-[#D9D9D9]/90 backdrop-blur px-6 h-16 flex items-center justify-between">
+    <div className="lg:hidden sticky top-0 z-40 bg-canvas/90 backdrop-blur px-6 h-16 flex items-center justify-between">
       <Link href="/dashboard" className="inline-flex items-center" aria-label="Scooply home">
         <ScooplyLogo size={26} showWordmark={false} />
       </Link>
@@ -22,7 +22,7 @@ export default async function SurveyPage() {
   if (!user) redirect('/login')
 
   return (
-    <div className="min-h-screen bg-[#D9D9D9] flex">
+    <div className="min-h-screen sc-field flex">
       <CategorySidebar activeKey="progress" userName={user.name} />
 
       <div className="flex-1 min-w-0 flex flex-col">
@@ -40,7 +40,7 @@ export default async function SurveyPage() {
                 </svg>
                 Back to progress
               </Link>
-              <h1 className="text-3xl font-bold text-zinc-900">Proficiency survey</h1>
+              <h1 className="font-display text-[38px] text-zinc-900">Proficiency survey</h1>
               <p className="text-zinc-500 mt-1.5 text-sm max-w-2xl">
                 Chat with Scout — Scooply&apos;s AI guide. A few questions and your level + interests are dialled in.
               </p>

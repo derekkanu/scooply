@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { PROFICIENCY_OPTIONS } from '@/lib/signup'
 import type { Proficiency } from '@/lib/auth'
 import Button from '@/components/ui/Button'
+import Orb, { PROFICIENCY_DENSITY } from '@/components/ui/Orb'
 
 interface ProficiencyChooserProps {
   initialValue?: Proficiency
@@ -20,10 +21,8 @@ export default function ProficiencyChooser({ initialValue, action }: Proficiency
         return (
           <label
             key={opt.id}
-            className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-4 transition-colors ${
-              active
-                ? 'border-zinc-900 bg-zinc-50'
-                : 'border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50/40'
+            className={`sc-card sc-card-lift flex cursor-pointer items-center gap-4 rounded-[16px] p-4 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-accent ${
+              active ? 'outline-2 -outline-offset-1 outline-accent/60' : ''
             }`}
           >
             <input
@@ -34,16 +33,10 @@ export default function ProficiencyChooser({ initialValue, action }: Proficiency
               onChange={() => setSelected(opt.id)}
               className="sr-only"
             />
-            <span
-              className={`mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
-                active ? 'border-zinc-900' : 'border-zinc-300'
-              }`}
-            >
-              {active && <span className="h-2.5 w-2.5 rounded-full bg-zinc-900" />}
-            </span>
-            <span className="flex flex-col gap-0.5">
-              <span className="text-sm font-semibold text-zinc-900">{opt.title}</span>
-              <span className="text-xs text-zinc-500 leading-relaxed">{opt.description}</span>
+            <Orb palette={active ? 'ember' : 'mono'} variant="pixel" density={PROFICIENCY_DENSITY[opt.id]} size={36} resolution={13} />
+            <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span className="text-sm font-semibold text-ink">{opt.title}</span>
+              <span className="text-xs leading-relaxed text-ink-3">{opt.description}</span>
             </span>
           </label>
         )

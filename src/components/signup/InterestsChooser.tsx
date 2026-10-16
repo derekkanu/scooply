@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { INTEREST_OPTIONS } from '@/lib/signup'
 import Button from '@/components/ui/Button'
+import Chip from '@/components/ui/Chip'
 
 interface InterestsChooserProps {
   initialSelected?: string[]
@@ -31,24 +32,14 @@ export default function InterestsChooser({ initialSelected = [], action }: Inter
         {INTEREST_OPTIONS.map((opt) => {
           const active = selected.has(opt.id)
           return (
-            <button
-              key={opt.id}
-              type="button"
-              onClick={() => toggle(opt.id)}
-              aria-pressed={active}
-              className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-                active
-                  ? 'border-zinc-900 bg-zinc-900 text-white'
-                  : 'border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50'
-              }`}
-            >
+            <Chip key={opt.id} selected={active} onClick={() => toggle(opt.id)}>
               {opt.label}
-            </button>
+            </Chip>
           )
         })}
       </div>
 
-      <p className="text-xs text-zinc-400">
+      <p className="text-xs text-ink-4">
         {selected.size === 0
           ? 'Pick at least one to continue.'
           : `${selected.size} selected — pick a few for a sharper feed.`}

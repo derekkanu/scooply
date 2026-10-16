@@ -22,7 +22,7 @@ export default function SplashOverlay() {
   return (
     <div
       aria-hidden
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-[#D9D9D9] transition-opacity ease-out ${
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-canvas transition-opacity ease-out ${
         phase === 'fading' ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
       style={{ transitionDuration: `${SPLASH_FADE_MS}ms` }}

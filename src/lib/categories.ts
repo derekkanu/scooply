@@ -5,25 +5,25 @@ export const categories: Category[] = [
     id: 'ai-foundations',
     name: 'AI Foundations',
     description: 'Core concepts, model releases, and research breakthroughs shaping the AI landscape.',
-    color: '#3B82F6',
+    color: '#1a1916',
   },
   {
     id: 'hands-on-ai-tools',
     name: 'Hands-On AI Tools',
     description: 'Practical tools, tutorials, and workflows to level up your AI skills.',
-    color: '#F59E0B',
+    color: '#3d3a35',
   },
   {
     id: 'ai-with-heart',
     name: 'AI with Heart',
     description: 'Human stories, ethics, and the social impact of AI on communities.',
-    color: '#8B5CF6',
+    color: '#55514a',
   },
   {
     id: 'stay-curious',
     name: 'Stay Curious',
     description: 'Weird, wonderful, and unexpected frontiers of AI exploration.',
-    color: '#10B981',
+    color: '#6b675f',
   },
 ]
 

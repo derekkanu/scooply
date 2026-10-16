@@ -20,7 +20,7 @@ interface PageProps {
 
 function MobileTopBar({ userName }: { userName?: string }) {
   return (
-    <div className="lg:hidden sticky top-0 z-40 bg-[#D9D9D9]/90 backdrop-blur px-6 h-16 flex items-center justify-between">
+    <div className="lg:hidden sticky top-0 z-40 bg-canvas/90 backdrop-blur px-6 h-16 flex items-center justify-between">
       <Link href="/dashboard" className="inline-flex items-center" aria-label="Scooply home">
         <ScooplyLogo size={26} showWordmark={false} />
       </Link>
@@ -59,7 +59,7 @@ function SectionCard({
 }) {
   return (
     <section id={id} className="bg-white rounded-3xl shadow-sm p-6 sm:p-8 scroll-mt-8">
-      <h2 className="text-lg font-bold text-zinc-900">{title}</h2>
+      <h2 className="font-display text-[22px] text-zinc-900">{title}</h2>
       <p className="text-sm text-zinc-500 mt-1">{description}</p>
       <div className="mt-5">{children}</div>
     </section>
@@ -73,7 +73,7 @@ export default async function SettingsPage({ searchParams }: PageProps) {
   const { saved, error } = await searchParams
 
   return (
-    <div className="min-h-screen bg-[#D9D9D9] flex">
+    <div className="min-h-screen sc-field flex">
       <CategorySidebar activeKey="settings" userName={user.name} />
 
       <div className="flex-1 min-w-0 flex flex-col">
@@ -82,7 +82,7 @@ export default async function SettingsPage({ searchParams }: PageProps) {
         <main className="flex-1 px-6 lg:px-10 xl:px-14 py-8 lg:py-12">
           <div className="max-w-2xl mx-auto space-y-6">
             <header>
-              <h1 className="text-3xl font-bold text-zinc-900">Settings</h1>
+              <h1 className="font-display text-[38px] text-zinc-900">Settings</h1>
               <p className="text-zinc-500 mt-1.5 text-sm">
                 Update what we feed you. Changes save instantly.
               </p>

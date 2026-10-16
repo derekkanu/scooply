@@ -23,7 +23,8 @@ export default function LandingReveal({ children, delay = 0, className = '' }: L
       className={className}
       style={{
         opacity: ready ? 1 : 0,
-        transition: 'opacity 800ms ease-out',
+        transform: ready ? 'none' : 'translate3d(0, 10px, 0)',
+        transition: 'opacity var(--sc-dur-calm) var(--ease-soft), transform var(--sc-dur-calm) var(--ease-soft)',
       }}
     >
       {children}

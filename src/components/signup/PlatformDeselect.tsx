@@ -43,16 +43,14 @@ export default function PlatformDeselect({
               type="button"
               onClick={() => toggle(p.id)}
               aria-pressed={active}
-              className={`relative flex flex-col items-center gap-2 rounded-2xl border p-4 transition-all ${
-                active
-                  ? 'border-zinc-900 bg-white'
-                  : 'border-zinc-200 bg-zinc-50 opacity-50 hover:opacity-80'
+              className={`sc-card sc-card-lift relative flex flex-col items-center gap-2 rounded-[16px] p-4 ${
+                active ? 'outline-2 -outline-offset-1 outline-accent/60' : 'opacity-50 hover:opacity-80'
               }`}
             >
               <PlatformIcon source={p.id} size="md" className={active ? '' : 'grayscale'} />
-              <span className="text-sm font-medium text-zinc-800">{p.label}</span>
+              <span className="text-sm font-medium text-ink-2">{p.label}</span>
               {!active && (
-                <span className="absolute top-2 right-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+                <span className="absolute top-2 right-2.5 text-[10px] font-semibold tracking-wider text-ink-4">
                   Off
                 </span>
               )}
@@ -61,8 +59,8 @@ export default function PlatformDeselect({
         })}
       </div>
 
-      <p className="text-xs text-zinc-400">
-        Tap to turn off any source you don't want in your feed. We'll keep the rest.
+      <p className="text-xs text-ink-4">
+        Tap to turn off any source you don&apos;t want in your feed. We&apos;ll keep the rest.
       </p>
 
       <form action={action} className="flex flex-col gap-3">
@@ -78,7 +76,7 @@ export default function PlatformDeselect({
         <form action={skipAction}>
           <button
             type="submit"
-            className="w-full text-sm text-zinc-500 hover:text-zinc-900 transition-colors py-2"
+            className="w-full text-small text-ink-3 hover:text-ink transition-colors py-2"
           >
             Skip — keep all sources
           </button>
