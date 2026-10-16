@@ -5,8 +5,8 @@ import ScooplyLogo from '@/components/ScooplyLogo'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#D9D9D9]">
-      <header className="sticky top-0 z-40 bg-[#D9D9D9]/90 backdrop-blur border-b border-zinc-300/70">
+    <div className="min-h-screen sc-field">
+      <header className="sticky top-0 z-40 bg-canvas/90 backdrop-blur border-b border-zinc-300/70">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Link href="/admin/posts" className="flex items-center gap-2.5">

@@ -16,17 +16,17 @@ export default function MobileCategoryPills({ active, className = '' }: MobileCa
   return (
     <div className={`relative -mx-6 ${className}`}>
       <div className="overflow-x-auto no-scrollbar">
-        <div className="flex items-center gap-3 px-6 pb-1 w-max">
+        <div className="flex items-center gap-2 px-6 pb-1 w-max">
           {ITEMS.map((item) => {
             const isActive = current === item.id
             return (
               <Link
                 key={item.id}
                 href={item.href}
-                className={`shrink-0 px-5 py-2.5 rounded-full text-[14px] font-medium whitespace-nowrap transition-colors ${
+                className={`shrink-0 inline-flex items-center h-10 px-4 rounded-full text-sm font-medium whitespace-nowrap border transition-colors duration-200 ease-soft ${
                   isActive
-                    ? 'bg-zinc-900 text-white'
-                    : 'border border-zinc-400/70 text-zinc-900 hover:border-zinc-500'
+                    ? 'bg-cream-deep text-ink border-gold'
+                    : 'border-transparent text-ink-3 hover:text-ink'
                 }`}
               >
                 {item.name}

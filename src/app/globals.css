@@ -1,17 +1,541 @@
 @import "tailwindcss";
 
+/* ──────────────────────────────────────────────────────────────────────────
+   Scooply design system — tokens
+   Light and quiet. Gray carries the layout, black is reserved for text (plus the
+   logo and pixel sphere), and color arrives only in small places: orbs, icon
+   tiles and one warm signal (orange). Raw values live on :root as --sc-*; the
+   @theme block maps them to Tailwind utilities (bg-canvas, text-ink-3…).
+   Dark theme is opt-in via data-theme="dark" on any ancestor.
+   ────────────────────────────────────────────────────────────────────────── */
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  /* One editorial system, everywhere: warm parchment ground, cream paper, warm black ink.
+     No hues — every tint below is a step of paper or stone so the engravings lead. */
+
+  /* Field — the parchment ground */
+  --sc-field-top: #eeeae0;
+  --sc-field-bottom: #e4dfd3;
+  --sc-canvas: #e9e5da;
+  --sc-parchment: #e9e5da;
+  --sc-parchment-deep: #e1dccf;
+
+  /* Surfaces — cream paper */
+  --sc-surface: #fbf8f1;
+  --sc-surface-muted: #f3efe6;
+  --sc-surface-sunken: #e2ddd0;
+  --sc-surface-warm: #fbf8f1;
+  --sc-glass: rgb(251 248 241 / 0.72);
+  --sc-paper: #fbf8f1; /* what "white" means here */
+  --sc-on-ink: #fbf8f1; /* text and marks set on an ink fill */
+
+  /* Paper & stone — the old cream/gold family, now neutral */
+  --sc-cream: #f6f2e9;
+  --sc-cream-deep: #ebe6da;
+  --sc-gold: #a39d90;
+  --sc-gold-soft: #ddd7ca;
+  --sc-tan: #5f5a50;
+  --sc-tan-fill: #e2ddd0;
+  --sc-tan-fill-hover: #d8d2c4;
+
+  /* Fills — neutral controls */
+  --sc-fill: #e2ddd0;
+  --sc-fill-hover: #d8d2c4;
+
+  /* Ink — a warm black and its greys */
+  --sc-ink: #1a1916;
+  --sc-ink-2: #3d3a35;
+  --sc-ink-3: #6b675f;
+  --sc-ink-4: #9d988d;
+
+  /* Lines */
+  --sc-line: rgb(26 25 22 / 0.08);
+  --sc-line-strong: rgb(26 25 22 / 0.16);
+
+  /* Signal — ink. Emphasis comes from weight, fill and rules, not color. */
+  --sc-accent: #1a1916;
+  --sc-accent-ink: #1a1916;
+  --sc-accent-soft: rgb(26 25 22 / 0.08);
+
+  /* Card tints — all paper now; each keeps its name so existing cards still resolve */
+  --sc-sky: #f6f2e9;
+  --sc-sky-ink: #1a1916;
+  --sc-butter: #f6f2e9;
+  --sc-butter-ink: #1a1916;
+  --sc-blush: #f6f2e9;
+  --sc-blush-ink: #1a1916;
+  --sc-coral: #1a1916;
+  --sc-coral-ink: #fbf8f1;
+  --sc-stone: #e2ddd0;
+  --sc-stone-ink: #1a1916;
+  --sc-lime: #f6f2e9;
+  --sc-lime-ink: #1a1916;
+  --sc-lavender: #f6f2e9;
+  --sc-lavender-ink: #1a1916;
+  --sc-mint: #f6f2e9;
+  --sc-mint-ink: #1a1916;
+
+  /* Status — kept for meaning, muted to sit in the palette */
+  --sc-positive: #3f6b4f;
+  --sc-positive-soft: rgb(63 107 79 / 0.12);
+  --sc-negative: #9c3b32;
+  --sc-negative-soft: rgb(156 59 50 / 0.1);
+
+  /* Elevation */
+  --sc-shadow-hairline: 0 0 0 1px var(--sc-line);
+  --sc-shadow-float: 0 1px 2px rgb(26 25 22 / 0.04), 0 10px 28px -14px rgb(26 25 22 / 0.14);
+  --sc-shadow-lift: 0 2px 4px rgb(26 25 22 / 0.04), 0 24px 56px -24px rgb(26 25 22 / 0.2);
+}
+
+[data-theme="dark"] {
+  --sc-field-top: #161512;
+  --sc-field-bottom: #0e0d0b;
+  --sc-canvas: #121110;
+  --sc-parchment: #121110;
+  --sc-parchment-deep: #1a1916;
+
+  --sc-surface: #1c1b18;
+  --sc-surface-muted: #22201c;
+  --sc-surface-sunken: #0e0d0b;
+  --sc-surface-warm: #1c1b18;
+  --sc-glass: rgb(28 27 24 / 0.72);
+  --sc-paper: #1c1b18;
+  --sc-on-ink: #121110;
+
+  --sc-cream: #1f1d1a;
+  --sc-cream-deep: #27251f;
+  --sc-gold: #6b665b;
+  --sc-gold-soft: #2f2c26;
+  --sc-tan: #b5afa2;
+  --sc-tan-fill: #2a2823;
+  --sc-tan-fill-hover: #33302a;
+
+  --sc-fill: #2a2823;
+  --sc-fill-hover: #33302a;
+
+  --sc-ink: #ece8de;
+  --sc-ink-2: #cdc8bc;
+  --sc-ink-3: #959083;
+  --sc-ink-4: #646056;
+
+  --sc-line: rgb(236 232 222 / 0.08);
+  --sc-line-strong: rgb(236 232 222 / 0.16);
+
+  --sc-accent: #ece8de;
+  --sc-accent-ink: #ece8de;
+  --sc-accent-soft: rgb(236 232 222 / 0.1);
+
+  --sc-sky: #1f1d1a;
+  --sc-sky-ink: #ece8de;
+  --sc-butter: #1f1d1a;
+  --sc-butter-ink: #ece8de;
+  --sc-blush: #1f1d1a;
+  --sc-blush-ink: #ece8de;
+  --sc-coral: #ece8de;
+  --sc-coral-ink: #121110;
+  --sc-stone: #27251f;
+  --sc-stone-ink: #ece8de;
+  --sc-lime: #1f1d1a;
+  --sc-lime-ink: #ece8de;
+  --sc-lavender: #1f1d1a;
+  --sc-lavender-ink: #ece8de;
+  --sc-mint: #1f1d1a;
+  --sc-mint-ink: #ece8de;
+
+  --sc-positive: #8fb79a;
+  --sc-positive-soft: rgb(143 183 154 / 0.14);
+  --sc-negative: #d98a80;
+  --sc-negative-soft: rgb(217 138 128 / 0.14);
+
+  --sc-shadow-float: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -14px rgb(0 0 0 / 0.7);
+  --sc-shadow-lift: 0 2px 4px rgb(0 0 0 / 0.4), 0 28px 60px -24px rgb(0 0 0 / 0.8);
+}
+
 @theme inline {
-  --color-background: #D9D9D9;
-  --color-foreground: #0A0A0A;
-  --font-sans: var(--font-geist-sans);
-  --font-serif: var(--font-instrument-serif);
-  --font-mono: var(--font-geist-mono);
+  /* Tailwind's own palette, folded into the system so stray utility colors stay monotone */
+  --color-white: var(--sc-paper);
+  --color-black: var(--sc-ink);
+  --color-zinc-50: var(--sc-surface-muted);
+  --color-zinc-100: var(--sc-cream-deep);
+  --color-zinc-200: var(--sc-gold-soft);
+  --color-zinc-300: var(--sc-tan-fill-hover);
+  --color-zinc-400: var(--sc-ink-4);
+  --color-zinc-500: var(--sc-ink-3);
+  --color-zinc-600: var(--sc-ink-3);
+  --color-zinc-700: var(--sc-ink-2);
+  --color-zinc-800: var(--sc-ink-2);
+  --color-zinc-900: var(--sc-ink);
+  --color-zinc-950: var(--sc-ink);
+  --color-emerald-50: var(--sc-positive-soft);
+  --color-emerald-200: var(--sc-positive-soft);
+  --color-emerald-600: var(--sc-positive);
+  --color-emerald-700: var(--sc-positive);
+  --color-emerald-800: var(--sc-positive);
+  --color-red-50: var(--sc-negative-soft);
+  --color-red-500: var(--sc-negative);
+  --color-red-600: var(--sc-negative);
+  --color-rose-50: var(--sc-negative-soft);
+  --color-rose-600: var(--sc-negative);
+
+  /* Color */
+  --color-background: var(--sc-canvas);
+  --color-foreground: var(--sc-ink);
+  --color-canvas: var(--sc-canvas);
+  --color-parchment: var(--sc-parchment);
+  --color-parchment-deep: var(--sc-parchment-deep);
+  --color-surface: var(--sc-surface);
+  --color-surface-muted: var(--sc-surface-muted);
+  --color-surface-sunken: var(--sc-surface-sunken);
+  --color-surface-warm: var(--sc-surface-warm);
+  --color-glass: var(--sc-glass);
+  --color-sky: var(--sc-sky);
+  --color-butter: var(--sc-butter);
+  --color-blush: var(--sc-blush);
+  --color-coral: var(--sc-coral);
+  --color-stone: var(--sc-stone);
+  --color-lime: var(--sc-lime);
+  --color-lavender: var(--sc-lavender);
+  --color-mint: var(--sc-mint);
+  --color-cream: var(--sc-cream);
+  --color-cream-deep: var(--sc-cream-deep);
+  --color-gold: var(--sc-gold);
+  --color-gold-soft: var(--sc-gold-soft);
+  --color-tan: var(--sc-tan);
+  --color-tan-fill: var(--sc-tan-fill);
+  --color-tan-fill-hover: var(--sc-tan-fill-hover);
+  --color-fill: var(--sc-fill);
+  --color-fill-hover: var(--sc-fill-hover);
+  --color-ink: var(--sc-ink);
+  --color-ink-2: var(--sc-ink-2);
+  --color-ink-3: var(--sc-ink-3);
+  --color-ink-4: var(--sc-ink-4);
+  --color-line: var(--sc-line);
+  --color-line-strong: var(--sc-line-strong);
+  --color-accent: var(--sc-accent);
+  --color-accent-ink: var(--sc-accent-ink);
+  --color-accent-soft: var(--sc-accent-soft);
+  --color-positive: var(--sc-positive);
+  --color-positive-soft: var(--sc-positive-soft);
+  --color-negative: var(--sc-negative);
+  --color-negative-soft: var(--sc-negative-soft);
+
+  /* Type */
+  --font-sans: var(--font-inter-tight);
+  --font-display: var(--font-inter-tight);
+
+  --text-display: 3.5rem;
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.035em;
+  --text-h1: 2.5rem;
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h2: 1.75rem;
+  --text-h2--line-height: 1.15;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h3: 1.25rem;
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.015em;
+  --text-title: 1.0625rem;
+  --text-title--line-height: 1.4;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.6;
+  --text-small: 0.8125rem;
+  --text-small--line-height: 1.55;
+  --text-micro: 0.6875rem;
+  --text-micro--line-height: 1.3;
+  --text-micro--letter-spacing: 0.14em;
+
+  /* Radius — tile → card → panel */
+  --radius-tile: 0.625rem;
+  --radius-control: 0.875rem;
+  --radius-card: 1.25rem;
+  --radius-panel: 1.75rem;
+  --radius-sheet: 2.25rem;
+
+  /* Elevation */
+  --shadow-hairline: var(--sc-shadow-hairline);
+  --shadow-float: var(--sc-shadow-float);
+  --shadow-lift: var(--sc-shadow-lift);
+
+  /* Motion */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-glide: cubic-bezier(0.45, 0, 0.55, 1);
+  --animate-rise: sc-rise 560ms var(--ease-soft) both;
+  --animate-breathe: sc-breathe 2.2s var(--ease-glide) infinite;
+}
+
+/* Motion durations (used inline / via duration-[var(--sc-dur-*)]) */
+:root {
+  --sc-dur-instant: 120ms;
+  --sc-dur-quick: 200ms;
+  --sc-dur-base: 320ms;
+  --sc-dur-slow: 560ms;
+  --sc-dur-calm: 800ms;
 }
 
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: var(--sc-canvas);
+  color: var(--sc-ink);
 }
+
+@layer base {
+  /* Headlines: the body grotesk at medium weight, set tight, sentence case. Explicit
+     font-weight / tracking utilities still win. One family only — an <em> inside a
+     headline reads as part of it, not as a second voice. */
+  .font-display {
+    font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+  .font-display em {
+    font-style: normal;
+  }
+}
+
+/* ── Field ────────────────────────────────────────────────────────────────── */
+
+.sc-field {
+  background-color: var(--sc-canvas);
+  background-image:
+    radial-gradient(120% 70% at 50% -10%, var(--sc-field-top) 0%, transparent 70%),
+    linear-gradient(180deg, var(--sc-field-top) 0%, var(--sc-canvas) 45%, var(--sc-field-bottom) 100%);
+  background-attachment: fixed;
+}
+
+/* ── Corner brackets — gold viewfinder marks on cream cards ───────────────── */
+
+.sc-brackets {
+  --b-size: 9px;
+  --b-c: var(--sc-gold);
+  background-image:
+    linear-gradient(var(--b-c), var(--b-c)), linear-gradient(var(--b-c), var(--b-c)),
+    linear-gradient(var(--b-c), var(--b-c)), linear-gradient(var(--b-c), var(--b-c)),
+    linear-gradient(var(--b-c), var(--b-c)), linear-gradient(var(--b-c), var(--b-c)),
+    linear-gradient(var(--b-c), var(--b-c)), linear-gradient(var(--b-c), var(--b-c));
+  background-repeat: no-repeat;
+  background-size:
+    var(--b-size) 1px, 1px var(--b-size), var(--b-size) 1px, 1px var(--b-size),
+    var(--b-size) 1px, 1px var(--b-size), var(--b-size) 1px, 1px var(--b-size);
+  background-position: 0 0, 0 0, 100% 0, 100% 0, 0 100%, 0 100%, 100% 100%, 100% 100%;
+}
+.sc-brackets-accent { --b-c: var(--sc-accent); }
+
+/* ── Elevated card — the scoop-card depth, shared by every white card ───────── */
+
+.sc-card {
+  background-color: var(--sc-surface);
+  box-shadow:
+    0 0 0 1px var(--sc-line-strong),
+    0 1px 2px rgb(26 25 22 / 0.04),
+    0 10px 28px -14px rgb(26 25 22 / 0.14);
+}
+.sc-card-lift {
+  transition: transform var(--sc-dur-base) var(--ease-soft), box-shadow var(--sc-dur-base) var(--ease-soft);
+}
+.sc-card-lift:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px var(--sc-line-strong),
+    0 2px 4px rgb(26 25 22 / 0.05),
+    0 24px 56px -24px rgb(26 25 22 / 0.22);
+}
+[data-theme="dark"] .sc-card, [data-theme="dark"].sc-card {
+  box-shadow: 0 0 0 1px var(--sc-line), 0 10px 24px -10px rgb(0 0 0 / 0.5), 0 32px 64px -32px rgb(0 0 0 / 0.7);
+}
+
+/* ── Card pattern — a soft pixel grid in a darker shade of the card's own tint ─ */
+
+.sc-card-grid {
+  /* A plain, slightly deeper panel of the card's own tint. No pattern, so the illustration leads. */
+  background-color: var(--sc-card, var(--sc-stone));
+  background-image: linear-gradient(color-mix(in srgb, var(--sc-card-ink, #000) 4%, transparent), color-mix(in srgb, var(--sc-card-ink, #000) 4%, transparent));
+}
+
+/* ── Glass — the prompt-bar material ──────────────────────────────────────── */
+
+.sc-glass {
+  background: var(--sc-glass);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+/* ── Fade-out text — preview summaries dissolve before the redirect ───────── */
+
+.sc-fade-out {
+  -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+}
+
+/* ── Motion ───────────────────────────────────────────────────────────────── */
+
+@keyframes sc-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--sc-from-x, 0), var(--sc-from-y, 10px), 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sc-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes sc-breathe {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+@keyframes sc-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.sc-reveal {
+  animation: sc-rise var(--sc-dur-slow) var(--ease-soft) both;
+  animation-delay: var(--sc-delay, 0ms);
+}
+.sc-exit[data-dir="none"] { --sc-from-y: 0; }
+.sc-reveal[data-dir="down"] { --sc-from-y: -10px; }
+.sc-reveal[data-dir="left"] { --sc-from-x: 14px; --sc-from-y: 0; }
+.sc-reveal[data-dir="right"] { --sc-from-x: -14px; --sc-from-y: 0; }
+.sc-reveal[data-dir="none"] { --sc-from-y: 0; }
+
+.sc-exit {
+  animation: sc-leave var(--sc-dur-quick) var(--ease-soft) both;
+}
+
+@keyframes sc-leave {
+  from { opacity: 1; transform: none; }
+  to {
+    opacity: 0;
+    transform: translate3d(var(--sc-from-x, 0), var(--sc-from-y, 10px), 0);
+  }
+}
+
+.sc-float {
+  animation: sc-float 5s var(--ease-glide) infinite;
+}
+
+/* ── Landing: narrative words fade from pale to ink, then settle ─────────── */
+
+.sc-word-in { animation: sc-word-in 520ms var(--ease-soft) both; animation-delay: var(--sc-delay, 0ms); }
+@keyframes sc-word-in {
+  from { opacity: 0; color: var(--sc-ink-4); transform: translateY(6px); }
+  60% { opacity: 1; color: var(--sc-ink-4); }
+  to { opacity: 1; color: var(--sc-ink); transform: none; }
+}
+
+/* ── Illustration motion (see components/illustrations) ───────────────────── */
+
+.sc-illo-steam { animation: sc-illo-steam 3.2s var(--ease-glide) infinite both; }
+@keyframes sc-illo-steam {
+  0% { opacity: 0; transform: translateY(3%); }
+  35% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-5%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-reveal { animation-name: sc-fade; }
+  .sc-exit { --sc-from-x: 0; --sc-from-y: 0; }
+  .sc-float { animation: none; }
+  [class*="sc-illo-"], .sc-word-in, .marquee-track { animation: none !important; }
+}
+
+/* ── Scroll motion ───────────────────────────────────────────────────────────
+   Driven by the scroll position itself (CSS scroll-driven animations), so it costs no JS
+   and never stutters. Browsers without support, and anyone who prefers reduced motion,
+   simply see everything in place.
+     .sc-scroll        fades and rises in as it enters, fades up and away as it leaves.
+                       data-dir="left" | "right" | "up" picks the direction it arrives from.
+     .sc-scroll-group  every child does the same, alternating left · up · right.
+     .sc-parallax      drifts against the scroll; depth from --sc-depth (default 18px).
+     .sc-drift         hero only: sinks and fades over the first screen of scroll.
+     .sc-turn          hero only: the starburst turns a few degrees as you scroll. */
+
+@keyframes sc-scroll-in {
+  from {
+    opacity: 0;
+    translate: var(--sc-sx, 0) var(--sc-sy, 28px);
+  }
+}
+@keyframes sc-scroll-out {
+  to {
+    opacity: 0;
+    translate: 0 -20px;
+  }
+}
+@keyframes sc-parallax {
+  from { translate: 0 var(--sc-depth, 18px); }
+  to { translate: 0 calc(var(--sc-depth, 18px) * -1); }
+}
+@keyframes sc-drift {
+  to {
+    translate: 0 var(--sc-drift, 72px);
+    opacity: var(--sc-drift-fade, 0.15);
+  }
+}
+@keyframes sc-turn {
+  to { rotate: 14deg; }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .sc-scroll,
+    .sc-scroll-group > *,
+    .sc-card {
+      animation: sc-scroll-in linear both, sc-scroll-out linear forwards;
+      animation-timeline: view(), view();
+      animation-range: entry 0% cover 28%, exit 35% exit 100%;
+    }
+    [data-dir="left"].sc-scroll, .sc-scroll-group > :nth-child(3n + 1) { --sc-sx: -22px; --sc-sy: 14px; }
+    [data-dir="right"].sc-scroll, .sc-scroll-group > :nth-child(3n) { --sc-sx: 22px; --sc-sy: 14px; }
+    [data-dir="up"].sc-scroll { --sc-sx: 0; --sc-sy: 28px; }
+
+    .sc-parallax {
+      animation: sc-parallax linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+
+    .sc-drift,
+    .sc-turn {
+      animation: sc-drift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 90vh;
+    }
+    .sc-turn { animation-name: sc-turn; }
+  }
+}
+
+/* ── Page transitions — a soft cross-fade between routes (see app/template.tsx) ─ */
+
+@keyframes sc-page-out {
+  to { opacity: 0; translate: 0 -6px; }
+}
+@keyframes sc-page-in {
+  from { opacity: 0; translate: 0 10px; }
+}
+::view-transition-old(.sc-page-out) {
+  animation: sc-page-out 220ms var(--ease-soft) both;
+}
+::view-transition-new(.sc-page-in) {
+  animation: sc-page-in 420ms var(--ease-soft) 80ms both;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/* ── Legacy helpers (still used across the app) ───────────────────────────── */
 
 .line-clamp-2 {
   display: -webkit-box;
@@ -36,13 +560,8 @@ body {
   animation: marquee 40s linear infinite;
 }
 
-@keyframes splash-breathe {
-  0%, 100% { opacity: 0.1; }
-  50% { opacity: 1; }
-}
-
 .splash-breathe {
-  animation: splash-breathe 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  animation: sc-breathe 2.2s var(--ease-glide) infinite;
 }
 
 .no-scrollbar {

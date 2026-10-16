@@ -2,6 +2,7 @@
 
 import { useTransition, useState, type MouseEvent } from 'react'
 import { toggleSavedPost } from '@/lib/actions'
+import { Bookmark } from '@/components/ui/icons'
 
 interface SaveScoopButtonProps {
   postId: string
@@ -27,17 +28,11 @@ export default function SaveScoopButton({ postId, initialSaved }: SaveScoopButto
       onClick={handleClick}
       aria-label={saved ? 'Unsave scoop' : 'Save scoop'}
       aria-pressed={saved}
-      className="shrink-0 w-9 h-9 rounded-full inline-flex items-center justify-center text-zinc-600 hover:text-zinc-900 hover:bg-white/40 transition-colors"
+      className={`shrink-0 w-8 h-8 rounded-full inline-flex items-center justify-center transition-colors duration-200 ease-soft ${
+        saved ? 'bg-accent-soft text-accent-ink' : 'text-ink-3 hover:text-ink hover:bg-ink/5'
+      }`}
     >
-      {saved ? (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-          <path d="M6 3.5A1.5 1.5 0 0 1 7.5 2h9A1.5 1.5 0 0 1 18 3.5V21l-6-3.5L6 21V3.5Z" />
-        </svg>
-      ) : (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h9A1.5 1.5 0 0 1 18 3.5V21l-6-3.5L6 21V3.5Z" />
-        </svg>
-      )}
+      <Bookmark size={16} filled={saved} />
     </button>
   )
 }

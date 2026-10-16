@@ -1,13 +1,9 @@
 import type { Metadata, Viewport } from 'next'
-import { Geist, Instrument_Serif } from 'next/font/google'
+import { Inter_Tight } from 'next/font/google'
 import './globals.css'
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-geist-sans' })
-const instrumentSerif = Instrument_Serif({
-  subsets: ['latin'],
-  weight: '400',
-  variable: '--font-instrument-serif',
-})
+// One grotesk for everything: regular for reading, medium and tight for headlines.
+const interTight = Inter_Tight({ subsets: ['latin'], variable: '--font-inter-tight' })
 
 export const metadata: Metadata = {
   title: 'Scooply – AI News for Enthusiasts',
@@ -25,7 +21,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geist.variable} ${instrumentSerif.variable} h-full antialiased`}>
+    <html lang="en" className={`${interTight.variable} h-full antialiased`}>
       <body className="min-h-full overflow-x-clip">{children}</body>
     </html>
   )

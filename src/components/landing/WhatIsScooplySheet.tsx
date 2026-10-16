@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect } from 'react'
+import { useEffect, useSyncExternalStore } from 'react'
+import { createPortal } from 'react-dom'
 import ScooplyLogo from '../ScooplyLogo'
 
 interface WhatIsScooplySheetProps {
@@ -27,7 +28,7 @@ function ChaosToSignal() {
       const noise = rand(i, j)
       if (xNorm < 0.55) {
         if (noise < threshold) {
-          cells.push({ x: i, y: j, opacity: 0.55 + noise * 0.45 })
+          cells.push({ x: i, y: j, opacity: Math.round((0.55 + noise * 0.45) * 1000) / 1000 })
         }
       } else if (inBand) {
         cells.push({ x: i, y: j, opacity: 1 })
@@ -49,7 +50,7 @@ function ChaosToSignal() {
             y={c.y * cell + (cell - dot) / 2}
             width={dot}
             height={dot}
-            fill="#0A0A0A"
+            fill="#1a1916"
             opacity={c.opacity}
           />
         ))}
@@ -74,13 +75,13 @@ function ClickVsLearn() {
             [38, 60],
           ].map(([x, y], i) => (
             <g key={i} opacity={0.7 - i * 0.05}>
-              <circle cx={x + 4} cy={y + 4} r="3" fill="#0A0A0A" />
-              <circle cx={x + 4} cy={y + 4} r="8" stroke="#0A0A0A" strokeWidth="1" fill="none" />
+              <circle cx={x + 4} cy={y + 4} r="3" fill="#1a1916" />
+              <circle cx={x + 4} cy={y + 4} r="8" stroke="#1a1916" strokeWidth="1" fill="none" />
             </g>
           ))}
         </svg>
         <div className="text-center">
-          <p className="text-[11px] font-bold tracking-[0.14em] uppercase text-zinc-500">Clicks</p>
+          <p className="text-[13px] font-bold text-zinc-500">Clicks</p>
           <p className="text-sm text-zinc-700 mt-1">What grabs your interest</p>
         </div>
       </div>
@@ -104,12 +105,12 @@ function ClickVsLearn() {
               }
             })
             return cells.map(([x, y], i) => (
-              <rect key={i} x={10 + x * 6} y={10 + y * 6} width="5" height="5" fill="#0A0A0A" />
+              <rect key={i} x={10 + x * 6} y={10 + y * 6} width="5" height="5" fill="#1a1916" />
             ))
           })()}
           <path
             d="M58 38l5 5 10-12"
-            stroke="#10B981"
+            stroke="#3f6b4f"
             strokeWidth="4"
             strokeLinecap="square"
             strokeLinejoin="miter"
@@ -117,7 +118,7 @@ function ClickVsLearn() {
           />
         </svg>
         <div className="text-center">
-          <p className="text-[11px] font-bold tracking-[0.14em] uppercase text-zinc-500">Learning</p>
+          <p className="text-[13px] font-bold text-zinc-500">Learning</p>
           <p className="text-sm text-zinc-700 mt-1">What actually sticks</p>
         </div>
       </div>
@@ -178,7 +179,7 @@ function UpwardPath() {
             y={c.y * cell + (cell - dot) / 2}
             width={dot}
             height={dot}
-            fill="#0A0A0A"
+            fill="#1a1916"
           />
         ))}
         {arrow.map(([x, y], i) => (
@@ -188,7 +189,7 @@ function UpwardPath() {
             y={y * cell + (cell - dot) / 2}
             width={dot}
             height={dot}
-            fill="#0A0A0A"
+            fill="#1a1916"
           />
         ))}
       </svg>
@@ -198,7 +199,7 @@ function UpwardPath() {
 
 function MockFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl bg-[#D9D9D9] border border-zinc-300 shadow-sm overflow-hidden">
+    <div className="rounded-2xl sc-field border border-zinc-300 shadow-sm overflow-hidden">
       {children}
     </div>
   )
@@ -367,10 +368,10 @@ function ProgressCardMock() {
 }
 
 const MOCK_CATEGORIES = [
-  { name: 'AI Foundations', color: '#3B82F6', desc: 'Core concepts, model releases, and research breakthroughs shaping the AI landscape.', ratio: '0/4' },
-  { name: 'Hands-On AI Tools', color: '#F59E0B', desc: 'Practical tools, tutorials, and workflows to level up your AI skills.', ratio: '0/3' },
-  { name: 'AI with Heart', color: '#8B5CF6', desc: 'Human stories, ethics, and the social impact of AI on communities.', ratio: '0/3' },
-  { name: 'Stay Curious', color: '#10B981', desc: 'Weird, wonderful, and unexpected frontiers of AI exploration.', ratio: '0/2' },
+  { name: 'AI Foundations', color: '#1a1916', desc: 'Core concepts, model releases, and research breakthroughs shaping the AI landscape.', ratio: '0/4' },
+  { name: 'Hands-On AI Tools', color: '#3d3a35', desc: 'Practical tools, tutorials, and workflows to level up your AI skills.', ratio: '0/3' },
+  { name: 'AI with Heart', color: '#55514a', desc: 'Human stories, ethics, and the social impact of AI on communities.', ratio: '0/3' },
+  { name: 'Stay Curious', color: '#3f6b4f', desc: 'Weird, wonderful, and unexpected frontiers of AI exploration.', ratio: '0/2' },
 ] as const
 
 function ProgressDashboardMock() {
@@ -382,7 +383,7 @@ function ProgressDashboardMock() {
           {MOCK_CATEGORIES.map((c) => (
             <div key={c.name} className="rounded-2xl bg-white shadow-sm p-4">
               <div className="flex items-start justify-between gap-3">
-                <p className="text-[9px] sm:text-[10px] font-bold tracking-[0.14em] uppercase" style={{ color: c.color }}>
+                <p className="text-[9px] sm:text-[10px] font-bold" style={{ color: c.color }}>
                   {c.name}
                 </p>
                 <span
@@ -485,7 +486,12 @@ export default function WhatIsScooplySheet({ open, onClose }: WhatIsScooplySheet
     }
   }, [open, onClose])
 
-  return (
+  // portalled to <body> so no animated (transformed) ancestor can trap the fixed layer;
+  // rendered only once on the client, where document exists
+  const isClient = useSyncExternalStore(subscribeNever, () => true, () => false)
+  if (!isClient) return null
+
+  return createPortal(
     <div
       className={`fixed inset-0 z-50 ${open ? '' : 'pointer-events-none'}`}
       aria-hidden={!open}
@@ -501,8 +507,8 @@ export default function WhatIsScooplySheet({ open, onClose }: WhatIsScooplySheet
         role="dialog"
         aria-modal="true"
         aria-label="What is Scooply"
-        className={`absolute left-0 right-0 bottom-0 top-12 rounded-t-3xl sm:top-0 sm:left-auto sm:w-[75vw] sm:rounded-t-none sm:rounded-l-3xl bg-white shadow-2xl transition-transform duration-300 ease-out ${
-          open ? 'translate-y-0 sm:translate-x-0' : 'translate-y-full sm:translate-y-0 sm:translate-x-full'
+        className={`absolute left-0 right-0 bottom-0 top-12 rounded-t-3xl sm:top-0 sm:left-auto sm:w-[75vw] sm:rounded-t-none sm:rounded-l-3xl bg-white shadow-2xl transition-[transform,visibility] duration-300 ease-out ${
+          open ? 'translate-y-0 sm:translate-x-0' : 'translate-y-full sm:translate-y-0 sm:translate-x-full shadow-none! invisible'
         }`}
       >
         <button
@@ -690,6 +696,9 @@ export default function WhatIsScooplySheet({ open, onClose }: WhatIsScooplySheet
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
+
+const subscribeNever = () => () => {}

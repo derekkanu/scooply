@@ -1,6 +1,13 @@
 import Link from 'next/link'
 import ScooplyLogo from '../ScooplyLogo'
 import { SIGNUP_STEPS, type SignupStepIndex } from '@/lib/signup'
+import Eyebrow from '../ui/Eyebrow'
+import Reveal from '../ui/Reveal'
+import { ArrowLeft } from '../ui/icons'
+import Illustration from '../illustrations/Illustration'
+
+// One reading tool per step: sign up, pick a level, choose interests, choose sources.
+const STEP_ILLUSTRATION = ['paper', 'book', 'magnifier', 'binoculars'] as const
 
 interface StepFrameProps {
   step: SignupStepIndex
@@ -13,15 +20,13 @@ interface StepFrameProps {
 
 export default function StepFrame({ step, eyebrow, title, subtitle, backHref, children }: StepFrameProps) {
   return (
-    <main className="min-h-screen flex flex-col bg-[#D9D9D9] px-4">
+    <main className="relative min-h-screen flex flex-col sc-field px-4">
       <div className="absolute top-6 left-6">
         <Link
           href={backHref ?? '/login'}
-          className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900 transition-colors"
+          className="inline-flex items-center gap-1.5 text-small text-ink-3 hover:text-ink transition-colors"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
+          <ArrowLeft size={16} />
           {backHref ? 'Back' : 'Back to login'}
         </Link>
       </div>
@@ -34,22 +39,27 @@ export default function StepFrame({ step, eyebrow, title, subtitle, backHref, ch
             </Link>
           </div>
 
-          <div className="bg-white rounded-3xl p-8 sm:p-10 shadow-sm">
+          <Reveal className="sc-card rounded-[28px] p-8 sm:p-10">
             <div className="flex items-center gap-2 mb-6">
               {SIGNUP_STEPS.map((_, i) => (
                 <span
                   key={i}
-                  className={`h-1 flex-1 rounded-full transition-colors ${i <= step ? 'bg-zinc-900' : 'bg-zinc-200'}`}
+                  className={`h-1 flex-1 rounded-full transition-colors duration-500 ease-soft ${i < step ? 'bg-gold' : i === step ? 'bg-accent' : 'bg-gold-soft'}`}
                 />
               ))}
             </div>
 
-            <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-zinc-400">{eyebrow}</p>
-            <h1 className="text-2xl font-bold text-zinc-900 tracking-tight mt-2">{title}</h1>
-            <p className="text-sm text-zinc-500 mt-1.5">{subtitle}</p>
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <Eyebrow framed>{eyebrow}</Eyebrow>
+                <h1 className="font-display text-[32px] text-ink mt-4">{title}</h1>
+                <p className="text-sm text-ink-3 mt-1.5">{subtitle}</p>
+              </div>
+              <Illustration name={STEP_ILLUSTRATION[step]} size={112} className="-mt-4 -mr-2 hidden sm:block" />
+            </div>
 
             <div className="mt-7">{children}</div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </main>

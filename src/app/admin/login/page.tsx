@@ -15,16 +15,16 @@ export default async function AdminLoginPage({ searchParams }: AdminLoginPagePro
   const { error } = await searchParams
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[#D9D9D9] px-4">
+    <main className="min-h-screen flex items-center justify-center sc-field px-4">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center gap-3 mb-10">
           <ScooplyLogo size={44} showWordmark={false} />
-          <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Scooply CMS</h1>
+          <h1 className="font-display text-[32px] text-zinc-900">Scooply CMS</h1>
           <p className="text-sm text-zinc-500">Admin access only</p>
         </div>
 
         <div className="bg-white rounded-3xl p-8 shadow-sm">
-          <h2 className="text-lg font-semibold text-zinc-900 mb-6">Sign in</h2>
+          <h2 className="font-display text-[22px] text-zinc-900 mb-6">Sign in</h2>
           {error === 'invalid' && (
             <p className="text-sm text-red-500 mb-4 bg-red-50 px-3 py-2 rounded-lg">Incorrect password. Try again.</p>
           )}

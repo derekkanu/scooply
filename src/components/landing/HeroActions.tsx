@@ -1,41 +1,24 @@
-'use client'
-
-import { useState } from 'react'
 import Link from 'next/link'
-import WhatIsScooplySheet from './WhatIsScooplySheet'
+import { exploreAsGuest } from '@/lib/actions'
+import { ArrowUpRight } from '@/components/ui/icons'
 
+const LINK = 'group inline-flex items-center gap-1 text-[13px] font-medium text-ink underline-offset-4 hover:underline'
+const ARROW = 'transition-transform duration-200 ease-soft group-hover:-translate-y-0.5 group-hover:translate-x-0.5'
+
+/** Two quiet text actions under the hero's supporting line. Explore drops visitors straight into the feed. */
 export default function HeroActions() {
-  const [open, setOpen] = useState(false)
-
   return (
-    <>
-      <div className="flex items-center gap-2 sm:gap-3">
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="px-4 sm:px-7 py-3.5 rounded-full bg-black text-white text-sm font-medium hover:bg-zinc-800 transition-colors whitespace-nowrap"
-        >
-          What is Scooply?
+    <div className="flex items-center gap-8">
+      <Link href="/waitlist" className={LINK}>
+        Join the waitlist
+        <ArrowUpRight size={14} className={ARROW} />
+      </Link>
+      <form action={exploreAsGuest}>
+        <button type="submit" className={LINK}>
+          Explore
+          <ArrowUpRight size={14} className={ARROW} />
         </button>
-        <Link
-          href="/waitlist"
-          className="group px-4 sm:px-7 py-3.5 rounded-full bg-transparent text-zinc-900 text-sm font-medium border border-zinc-400/70 hover:border-zinc-500 transition-colors flex items-center gap-2 whitespace-nowrap"
-        >
-          Join the waiting list
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            className="transition-transform group-hover:translate-x-0.5"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-        </Link>
-      </div>
-
-      <WhatIsScooplySheet open={open} onClose={() => setOpen(false)} />
-    </>
+      </form>
+    </div>
   )
 }

@@ -16,7 +16,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const { error } = await searchParams
 
   return (
-    <main className="min-h-screen flex flex-col bg-[#D9D9D9] px-4">
+    <main className="min-h-screen flex flex-col sc-field px-4">
       <div className="absolute top-6 left-6">
         <Link
           href="/"
@@ -35,12 +35,12 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             <Link href="/" className="hover:opacity-80 transition-opacity">
               <ScooplyLogo size={44} showWordmark={false} />
             </Link>
-            <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Scooply</h1>
+            <h1 className="font-display text-[32px] text-zinc-900">Scooply</h1>
             <p className="text-sm text-zinc-500 text-center">Your AI news feed, curated daily.</p>
           </div>
 
           <div className="bg-white rounded-3xl p-8 shadow-sm">
-            <h2 className="text-lg font-semibold text-zinc-900 mb-1">Welcome back</h2>
+            <h2 className="font-display text-[22px] text-zinc-900 mb-1">Welcome back</h2>
             <p className="text-sm text-zinc-500 mb-6">Enter your name to get started.</p>
 
             {error === 'name' && (
@@ -55,7 +55,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
             <div className="flex items-center gap-3 my-6">
               <span className="h-px flex-1 bg-zinc-100" />
-              <span className="text-[11px] uppercase tracking-[0.14em] text-zinc-400">New here?</span>
+              <span className="text-[13px] text-zinc-400">New here?</span>
               <span className="h-px flex-1 bg-zinc-100" />
             </div>
 
