@@ -70,7 +70,14 @@ export default async function DashboardPage({ searchParams }: PageProps) {
         <MobileTopBar activeKey={category ?? 'all'} userName={user?.name} />
 
         <main className="flex-1 px-6 lg:px-12 xl:px-16 pt-4 pb-10 lg:pt-8 lg:pb-14">
-          {lead && <BriefingHeadline firstName={firstName} />}
+          {lead && (
+            <BriefingHeadline firstName={firstName}>
+              <MobileCategoryPills active={category ?? 'all'} />
+              <Suspense>
+                <SearchBar defaultValue={q} />
+              </Suspense>
+            </BriefingHeadline>
+          )}
           {lead && (
             <div className="max-w-6xl mx-auto mt-4 mb-14 lg:mt-6 lg:mb-20">
               <Briefing
@@ -116,8 +123,8 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                 )}
               </header>
 
-              {/* Mobile-only nav + search row */}
-              <div className="lg:hidden space-y-4">
+              {/* Mobile-only nav + search row (pinned inside the greeting when the briefing shows) */}
+              <div className={`lg:hidden space-y-4 ${lead ? 'hidden' : ''}`}>
                 <MobileCategoryPills active={category ?? 'all'} />
                 <Suspense>
                   <SearchBar defaultValue={q} />

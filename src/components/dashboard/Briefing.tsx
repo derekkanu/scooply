@@ -192,11 +192,12 @@ export default function Briefing({ lead, moving, allPosts, viewedIds, savedCount
  * The greeting, pinned to the top of the dashboard. It sits on the page's own background
  * (fixed, so the band is seamless) and fades out at its lower edge, so the feed scrolls up
  * and dissolves beneath it. Over the first stretch of scroll it eases down to a compact
- * size (.sc-shrink in globals.css) so it never crowds the screen.
+ * size (.sc-shrink in globals.css) so it never crowds the screen. On phones it also carries
+ * the topic pills and search (passed as children), which the desktop keeps in the sidebar.
  */
-export function BriefingHeadline({ firstName }: { firstName: string }) {
+export function BriefingHeadline({ firstName, children }: { firstName: string; children?: React.ReactNode }) {
   return (
-    <div className="sc-field sticky top-16 z-20 -mx-6 px-6 pt-3 pb-14 [mask-image:linear-gradient(to_bottom,black_55%,transparent)] lg:top-0 lg:-mx-12 lg:px-12 lg:pt-6 xl:-mx-16 xl:px-16">
+    <div className="sc-field sticky top-16 z-20 -mx-6 px-6 pt-3 pb-12 [mask-image:linear-gradient(to_bottom,black_calc(100%-2.75rem),transparent)] lg:top-0 lg:-mx-12 lg:px-12 lg:pt-6 xl:-mx-16 xl:px-16">
       <h1
         id="brief-title"
         className="sc-shrink mx-auto max-w-6xl font-display text-[30px] leading-[1.1] text-ink [--sc-shrink-to:20px] sm:text-[48px] sm:leading-[1.08] sm:[--sc-shrink-to:26px] lg:text-[56px] lg:[--sc-shrink-to:30px]"
@@ -205,6 +206,8 @@ export function BriefingHeadline({ firstName }: { firstName: string }) {
         <br />
         <span className="text-ink-4">Here&apos;s what moved in AI.</span>
       </h1>
+      {/* phones only: topic pills and search pin along with the greeting */}
+      {children && <div className="mt-4 space-y-3 lg:hidden">{children}</div>}
     </div>
   )
 }
